@@ -79,6 +79,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dontregister"/>
+        <TextView
+            android:id="@+id/register_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:text=" 이곳을 눌러 보세요!"/>
     </LinearLayout>
 
 </LinearLayout>

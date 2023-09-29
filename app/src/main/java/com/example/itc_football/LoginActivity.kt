@@ -1,13 +1,16 @@
 package com.example.itc_football
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.itc_football.databinding.ActivityMainBinding
+import com.example.itc_football.databinding.LoginactivityBinding
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: LoginactivityBinding
 
     lateinit var username : EditText
     lateinit var password : EditText
@@ -15,10 +18,16 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.loginactivity)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = LoginactivityBinding.inflate(layoutInflater)
 
+        val view = binding.root
+        setContentView(view)
+
+
+        binding.registerBtn.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
