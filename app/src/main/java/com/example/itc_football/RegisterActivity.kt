@@ -33,12 +33,13 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener, View.OnFocus
         db= AppDatabase.getInstance(this)!!
         registerDao = db.getRegisterDao()
         binding.regBtn.setOnClickListener{
-            if(validateName() && validateEmail() && validatePassword() && validateCheckPassword() && validatePasswordMatch()){
+            if(validateName() && validateEmail() && validatePassword() && validateCheckPassword() && validatePasswordMatch() && validateDept()){
                 val name = binding.regName.text.toString()
                 val email = binding.regEmail.text.toString()
                 val password = binding.regPassword.text.toString()
                 val checkPassword = binding.regCheckpassword.text.toString()
-                val registerEntity = RegisterEntity(null, name, email, password, checkPassword)
+                val department = binding.regDept.text.toString()
+                val registerEntity = RegisterEntity(null, name, email, department ,password, checkPassword)
 
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -70,6 +71,20 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener, View.OnFocus
         }
         if(errorMessage!=null){
             binding.regName.apply {
+                var isErrorEnabled = true
+                error = errorMessage
+            }
+        }
+        return errorMessage == null
+    }
+    private fun validateDept(): Boolean {
+        var errorMessage: String? =null
+        val value: String = binding.regDept.text.toString()
+        if(value.isEmpty()){
+            errorMessage = "학과 입력해주세요"
+        }
+        if(errorMessage!=null){
+            binding.regDept.apply {
                 var isErrorEnabled = true
                 error = errorMessage
             }
@@ -141,6 +156,11 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener, View.OnFocus
                 R.id.reg_checkpassword -> {
                     if(!hasFocus){
                         validateCheckPassword()
+                    }
+                }
+                R.id.reg_dept -> {
+                    if(!hasFocus){
+                        validateDept()
                     }
                 }
             }

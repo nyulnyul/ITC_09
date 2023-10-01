@@ -9,4 +9,5 @@
     <string name="apppreview">인하 자취생들을 위한 공동구매</string>
     <string name="login">로그인</string>
     <string name="dontregister">회원가입을 안하셨나요?</string>
+    <string name="dept">학과</string>
 </resources>
