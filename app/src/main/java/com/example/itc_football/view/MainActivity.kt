@@ -1,7 +1,10 @@
-package com.example.itc_football
+package com.example.itc_football.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.itc_football.Chat
+import com.example.itc_football.SocketHandler
 import com.example.itc_football.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -12,23 +15,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        socketHandler = SocketHandler()
         binding.sendHello.setOnClickListener {
-            val chat = Chat("nyulnyul", "kkkkkkkk")
-            socketHandler.emitChat(chat)
+            val intent = Intent(this, PreviewActivity::class.java)
+            startActivity(intent)
         }
-        socketHandler.onNewChat.observe(this) {
 
-        }
 
     }
 
-
-    override fun onDestroy() {
-
-        socketHandler.disconnectSocket()
-        super.onDestroy()
-    }
 
 
 }

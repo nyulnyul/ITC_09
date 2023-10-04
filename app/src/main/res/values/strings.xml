@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ITC_Football</string>
+    <string name="name">이름</string>
+    <string name="email">학번</string>
+    <string name="password">비밀번호</string>
+    <string name="checkpassword">비밀번호 확인</string>
+    <string name="register">회원 가입</string>
+    <string name="appname">인하공구</string>
+    <string name="apppreview">인하 자취생들을 위한 공동구매</string>
+    <string name="login">로그인</string>
+    <string name="dontregister">회원가입을 안하셨나요?</string>
+    <string name="dept">학과</string>
 </resources>
