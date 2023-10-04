@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -44,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
 
     implementation("io.socket:socket.io-client:2.0.0"){ exclude(group = "org.json", module = "json")}
 

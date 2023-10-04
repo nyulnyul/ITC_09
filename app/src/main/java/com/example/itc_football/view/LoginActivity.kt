@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.loginBtn.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ItemListActivity::class.java)
             startActivity(intent)
         }
         binding.registerBtn.setOnClickListener {

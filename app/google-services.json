@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079532836204",
+    "project_id": "inha-09",
+    "storage_bucket": "inha-09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079532836204:android:f7a080df6e5f5a4e4c4f49",
+        "android_client_info": {
+          "package_name": "com.example.itc_football"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgYCIyAE-1jD1broICYlQwmX8t71Bcxsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

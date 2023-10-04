@@ -37,7 +37,6 @@
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/productName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -59,7 +58,6 @@
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/productDetail"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="10dp"
