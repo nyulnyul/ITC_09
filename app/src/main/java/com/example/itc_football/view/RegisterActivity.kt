@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.itc_football.R
-import com.example.itc_football.databinding.RegisteractivityBinding
+import com.example.itc_football.databinding.RegisterActivityBinding
 import com.example.itc_football.db.AppDatabase
 import com.example.itc_football.db.RegisterDao
 import com.example.itc_football.db.RegisterEntity
@@ -18,13 +18,13 @@ import kotlinx.coroutines.withContext
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: RegisteractivityBinding
+    private lateinit var binding: RegisterActivityBinding
     private lateinit var db: AppDatabase
     private lateinit var registerDao: RegisterDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = RegisteractivityBinding.inflate(LayoutInflater.from(this))
+        binding = RegisterActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
         registerDao = db.getRegisterDao()

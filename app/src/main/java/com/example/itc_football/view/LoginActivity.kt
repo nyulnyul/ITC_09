@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.example.itc_football.databinding.LoginactivityBinding
+import com.example.itc_football.databinding.LoginActivityBinding
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: LoginactivityBinding
+    private lateinit var binding: LoginActivityBinding
 
     lateinit var username : EditText
     lateinit var password : EditText
@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LoginactivityBinding.inflate(layoutInflater)
+        binding = LoginActivityBinding.inflate(layoutInflater)
 
         val view = binding.root
         setContentView(view)

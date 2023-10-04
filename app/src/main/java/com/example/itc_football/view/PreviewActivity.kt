@@ -6,15 +6,15 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.itc_football.Chat
-import com.example.itc_football.databinding.PreviewactivityBinding
+import com.example.itc_football.databinding.PreviewActivityBinding
 
 class PreviewActivity : AppCompatActivity() {
-    private lateinit var binding: PreviewactivityBinding
+    private lateinit var binding: PreviewActivityBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = PreviewactivityBinding.inflate(layoutInflater)
+        binding = PreviewActivityBinding.inflate(layoutInflater)
 
         val view = binding.root
         setContentView(view)
