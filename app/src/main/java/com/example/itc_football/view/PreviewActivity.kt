@@ -20,7 +20,7 @@ class PreviewActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.getChatBtn.setOnClickListener {
-            val intent = Intent(this, Chat::class.java)
+            val intent = Intent(this, ChatActivity::class.java)
             startActivity(intent)
         }
 
