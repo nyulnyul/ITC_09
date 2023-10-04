@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SpinnerTextStyle">
+        <item name="android:textSize">18sp</item> <!-- 원하는 글꼴 크기로 변경 -->
+    </style>
+</resources>

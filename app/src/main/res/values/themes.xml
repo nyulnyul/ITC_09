@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.ITC_Football" parent="Base.Theme.ITC_Football" />
+
+    <style name="roundImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10%</item>
+    </style>
 </resources>
