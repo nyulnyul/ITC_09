@@ -28,7 +28,7 @@ class ItemListActivity : AppCompatActivity() {
         binding.listView.adapter = Adapter
 
         val firestore = FirebaseFirestore.getInstance()
-        val productsCollection = firestore.collection("products")
+        val productsCollection = firestore.collection("product")
 
         productsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
@@ -42,7 +42,7 @@ class ItemListActivity : AppCompatActivity() {
                     val product = Product(productName, productPrice.toInt(), maxMember, nowMember)
                     ProductList.add(product)
                 }
-                print(ProductList)
+                Log.d("Firestore", "Product List: $ProductList")
             }
             Adapter.notifyDataSetChanged()
         }
