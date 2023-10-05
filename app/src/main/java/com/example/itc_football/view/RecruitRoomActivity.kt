@@ -80,6 +80,7 @@ class RecruitRoomActivity : AppCompatActivity() {
 
         // 사용자가 입력한 정보를 가져와서 Firebase Firestore에 추가합니다.
         val productName = binding.productName.text.toString()
+        val productDetail = binding.productDetail.text.toString()
         val productPrice = binding.productPrice.text.toString().toLong()
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
@@ -87,6 +88,7 @@ class RecruitRoomActivity : AppCompatActivity() {
 
         val productData = hashMapOf(
             "productName" to productName,
+            "productDetail" to productDetail,
             "productPrice" to productPrice,
             "maxMember" to maxMember,
             "nowMember" to nowMember,
@@ -98,6 +100,14 @@ class RecruitRoomActivity : AppCompatActivity() {
                 // 성공적으로 추가된 경우
                 val productId = documentReference.id
                 // 추가 작업을 수행하거나 다른 화면으로 이동할 수 있습니다.
+//                documentReference.update("productId", productId)
+//                    .addOnSuccessListener {
+//                        // 도큐먼트 ID가 업데이트된 경우
+//                    }
+//                    .addOnFailureListener { e ->
+//                        // 업데이트 실패 시 처리
+//                    }
+
             }
             .addOnFailureListener { e ->
                 // 추가 실패 시 처리

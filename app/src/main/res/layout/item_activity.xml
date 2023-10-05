@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/productName"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="상품"
             android:textSize="17sp"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/productPrice"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="10,000원"
             android:textSize="20sp"

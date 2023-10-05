@@ -36,15 +36,17 @@ class ItemListActivity : AppCompatActivity() {
             ProductList.clear() // 기존 리스트 초기화
             for (document in documents) {
                 val productName = document.getString("productName")
+                val productDetail = document.getString("productDetail")
                 val productPrice = document.getLong("productPrice")
                 val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                 val nowMember = document.getLong("nowMember")?.toInt() ?: 0
                 val imageUrl = document.getString("imageUrl")
+//                val productId = document.getString("productId")
 
                 // null 값이 아닐 경우에만 리스트에 추가
                 // imageUrl은 null이어도 상관없나 고민중
-                if (productName != null && productPrice != null && imageUrl != null) {
-                    val product = Product(productName, productPrice.toInt(), imageUrl, maxMember, nowMember)
+                if (productName != null && productDetail != null && productPrice != null && imageUrl != null) {
+                    val product = Product(productName, productDetail, productPrice.toInt(), imageUrl, maxMember, nowMember)
                     ProductList.add(product) // 리스트에 추가
                 }
                 Log.d("Firestore", "Product List: $ProductList")
@@ -58,10 +60,12 @@ class ItemListActivity : AppCompatActivity() {
                 val selectItem = parent.getItemAtPosition(position) as Product
                 intent = Intent(this, PreviewActivity::class.java)
                 intent.putExtra("productName", selectItem.productName)
+                intent.putExtra("productDetail", selectItem.productDetail)
                 intent.putExtra("productPrice", selectItem.productPrice)
                 intent.putExtra("imageUrl", selectItem.imageUrl)
                 intent.putExtra("peopleNum", selectItem.maxMember)
                 intent.putExtra("nowMember", selectItem.nowMember)
+//                intent.putExtra("productId", selectItem.productId)
                 startActivity(intent)
             }
 

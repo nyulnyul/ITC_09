@@ -78,7 +78,7 @@
 
 
                 <ImageView
-                    android:id="@+id/productImage"
+                    android:id="@+id/imageUrl"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginTop="10dp"
@@ -137,12 +137,31 @@
                         android:text="120000원"
                         android:textSize="20dp" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="100dp"
-                        android:layout_marginTop="10dp"
-                        android:text="1/4" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/nowMember"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="/" />
+
+                        <TextView
+                            android:id="@+id/maxMember"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="10" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
