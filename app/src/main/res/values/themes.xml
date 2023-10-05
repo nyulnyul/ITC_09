@@ -3,6 +3,9 @@
     <style name="Base.Theme.ITC_Football" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/light_blue</item>
+
 
     </style>
 
@@ -11,5 +14,9 @@
     <style name="roundImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10%</item>
+    </style>
+    <style name="SlideActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
     </style>
 </resources>

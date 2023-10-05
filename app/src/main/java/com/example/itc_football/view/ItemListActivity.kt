@@ -66,6 +66,27 @@ class ItemListActivity : AppCompatActivity() {
             val intent = Intent(this, RecruitRoomActivity::class.java)
             startActivity(intent)
         }
+        binding.bottomNavigation.selectedItemId = binding.bottomNavigation.menu.getItem(0).itemId
+        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.bottom_home -> {
+                    val intent = Intent(this, ItemListActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.bottom_chat -> {
+                    val intent = Intent(this, ChatListActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.bottom_mypage -> {
+                    val intent = Intent(this, MyPageActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
 
     }
 

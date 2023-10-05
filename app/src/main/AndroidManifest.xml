@@ -15,6 +15,7 @@
         android:theme="@style/Theme.ITC_Football"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".ProductAdapter"
             android:exported="false" />
@@ -32,8 +33,11 @@
         <activity android:name=".view.PreviewActivity" />
         <activity android:name=".view.ChatActivity" />
         <activity android:name=".view.ItemListActivity" />
-        <activity android:name=".view.DetailedActivity" />
         <activity android:name=".view.RecruitRoomActivity" />
+        <activity android:name=".view.ChatListActivity" />
+        <activity android:name=".view.MyPageActivity" />
+
+
     </application>
 
 </manifest>
