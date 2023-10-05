@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.RecruitRoomActivity"
-    >
+    tools:context=".view.RecruitRoomActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -16,9 +15,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_gravity="center_horizontal"
             android:gravity="center|top"
+            android:orientation="vertical"
             android:padding="24dp">
 
             <ImageButton
@@ -35,9 +34,10 @@
                 android:layout_marginTop="15dp"
                 android:text="상품명"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/productName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -47,7 +47,38 @@
                 android:hint="상품명"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background"/>
+                android:textColorHighlight="@color/cardview_dark_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="상품 가격"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/productPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="8dp"
+
+                    android:drawablePadding="8dp"
+                    android:ems="10"
+                    android:hint="10000"
+                    android:textAlignment="textEnd"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/cardview_dark_background" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/productDetailText"
@@ -56,11 +87,11 @@
                 android:layout_marginTop="25dp"
                 android:text="상품 상세내용"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="170dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/custom_edittext2"
                 android:drawableLeft="@drawable/baseline_mode_24"
@@ -68,7 +99,7 @@
                 android:hint="상품상세"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background"/>
+                android:textColorHighlight="@color/cardview_dark_background" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,14 +116,13 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/maxMember"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:entries="@array/person_array"
                     android:spinnerMode="dropdown"
-                    android:theme="@style/SpinnerTextStyle"
-                    />
+                    android:theme="@style/SpinnerTextStyle" />
 
             </LinearLayout>
 
@@ -105,12 +135,11 @@
                 android:id="@+id/recruitOkBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:backgroundTint="@color/purple"
                 android:text="방만들기"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:backgroundTint="@color/purple"
-                app:cornerRadius="10dp"
-                />
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
