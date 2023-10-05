@@ -31,6 +31,7 @@ class ItemListActivity : AppCompatActivity() {
         val productsCollection = firestore.collection("product")
 
         productsCollection.get().addOnSuccessListener { documents ->
+            ProductList.clear() // 기존 리스트 초기화
             for (document in documents) {
                 val productName = document.getString("productName")
                 val productPrice = document.getLong("productPrice")
