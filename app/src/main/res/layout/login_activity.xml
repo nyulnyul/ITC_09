@@ -41,6 +41,7 @@
                 android:textSize="18dp"
                 android:layout_gravity="center"/>
             <EditText
+                android:id="@+id/loginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/email"
@@ -50,6 +51,7 @@
                 android:layout_marginTop="40dp"
                 android:drawablePadding="8dp"/>
             <EditText
+                android:id="@+id/loginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
