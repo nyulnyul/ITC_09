@@ -24,17 +24,19 @@ class ProductAdapter (val context: Context, val ProductList: ArrayList<Product>)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(context).inflate(R.layout.item_activity, null)
 
-        val productImage = view.findViewById<ImageView>(R.id.listImage)
+        val productImage = view.findViewById<ImageView>(R.id.productImage)
         val productName = view.findViewById<TextView>(R.id.productName)
         val productPrice = view.findViewById<TextView>(R.id.productPrice)
-        val peopleNum = view.findViewById<TextView>(R.id.peopleNum)
+        val maxMember = view.findViewById<TextView>(R.id.maxMember)
+        val nowMember = view.findViewById<TextView>(R.id.nowMember)
 
         val product = ProductList[position]
 
-        productImage.setImageResource(product.productImage)
+//        productImage.setImageResource(product.productImage)
         productName.text = product.productName
         productPrice.text = product.productPrice.toString()
-        peopleNum.text = product.peopleNum.toString()
+        maxMember.text = product.maxMember.toString()
+        nowMember.text = product.nowMember.toString()
 
         return view
     }
