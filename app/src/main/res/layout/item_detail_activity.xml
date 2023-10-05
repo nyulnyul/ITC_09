@@ -7,90 +7,110 @@
     android:orientation="vertical"
     tools:context=".view.DetailedActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nickName"
-        android:text="김수바리"
-        android:layout_marginTop="14dp"
-        android:layout_marginStart="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/studentId"
-        android:text="202045052"
-        android:textSize="17sp"
-        android:layout_marginStart="20dp"/>
-
     <androidx.cardview.widget.CardView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="20dp"
-        android:elevation="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:id="@+id/productImage"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_mode_24"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nickName"
+                android:text="김수바리"
+                android:layout_marginTop="14dp"
+                android:layout_marginStart="20dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/studentId"
+                android:text="202045052"
+                android:textSize="17sp"
+                android:layout_marginStart="20dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="20dp"
+                android:elevation="8dp">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:id="@+id/productImage"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/baseline_mode_24"/>
 
 
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/productName"
+                android:text="연필"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/productPrice"
+                android:text="150,000원"
+                android:textSize="20sp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/productDetail"
+                android:text="아주 단단한 연필 공구해요. 3명이서 삽시당. 인당 5만원 밖에 안해요~~"
+                android:textSize="17sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/enterButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="24dp"
+                android:text="참가하기"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/purple"
+                app:cornerRadius="10dp"
+                android:layout_marginHorizontal="20dp" />
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/productName"
-        android:text="연필"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/productPrice"
-        android:text="150,000원"
-        android:textSize="20sp"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="10dp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/productDetail"
-        android:text="아주 단단한 연필 공구해요. 3명이서 삽시당. 인당 5만원 밖에 안해요~~"
-        android:textSize="17sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
-
-    <Button
-        android:id="@+id/enterButton"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="참가하기"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:backgroundTint="@color/purple"
-        app:cornerRadius="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="150dp"
-        android:layout_marginHorizontal="20dp" />
 
 
 </LinearLayout>

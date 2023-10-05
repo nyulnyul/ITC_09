@@ -48,6 +48,11 @@ class ItemListActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
+        binding.recruitBtn.setOnClickListener(){
+            val intent = Intent(this, RecruitRoomActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 
