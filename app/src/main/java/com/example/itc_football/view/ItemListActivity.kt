@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.itc_football.Product
 import com.example.itc_football.ProductAdapter
 import com.example.itc_football.R
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ItemListActivity : AppCompatActivity() {
     private lateinit var binding: ItemListActivityBinding
+    private val firestore = FirebaseFirestore.getInstance()
 
     var ProductList = arrayListOf<Product>()
 
@@ -27,7 +29,7 @@ class ItemListActivity : AppCompatActivity() {
         val Adapter = ProductAdapter(this, ProductList)
         binding.listView.adapter = Adapter
 
-        val firestore = FirebaseFirestore.getInstance()
+        // firestore에서 데이터 가져오기
         val productsCollection = firestore.collection("product")
 
         productsCollection.get().addOnSuccessListener { documents ->
@@ -35,13 +37,15 @@ class ItemListActivity : AppCompatActivity() {
             for (document in documents) {
                 val productName = document.getString("productName")
                 val productPrice = document.getLong("productPrice")
-//                val productImage = document.getString("productImage")
                 val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                 val nowMember = document.getLong("nowMember")?.toInt() ?: 0
+                val imageUrl = document.getString("imageUrl")
 
-                if (productName != null && productPrice != null) {
-                    val product = Product(productName, productPrice.toInt(), maxMember, nowMember)
-                    ProductList.add(product)
+                // null 값이 아닐 경우에만 리스트에 추가
+                // imageUrl은 null이어도 상관없나 고민중
+                if (productName != null && productPrice != null && imageUrl != null) {
+                    val product = Product(productName, productPrice.toInt(), imageUrl, maxMember, nowMember)
+                    ProductList.add(product) // 리스트에 추가
                 }
                 Log.d("Firestore", "Product List: $ProductList")
             }
@@ -55,7 +59,7 @@ class ItemListActivity : AppCompatActivity() {
                 intent = Intent(this, PreviewActivity::class.java)
                 intent.putExtra("productName", selectItem.productName)
                 intent.putExtra("productPrice", selectItem.productPrice)
-//                intent.putExtra("productImage", selectItem.productImage)
+                intent.putExtra("imageUrl", selectItem.imageUrl)
                 intent.putExtra("peopleNum", selectItem.maxMember)
                 intent.putExtra("nowMember", selectItem.nowMember)
                 startActivity(intent)

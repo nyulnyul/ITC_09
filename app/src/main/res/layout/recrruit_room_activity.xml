@@ -20,18 +20,27 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="15dp"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <ImageView
+                android:id="@+id/img_product"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/common_google_signin_btn_icon_dark"/>
+
+            <Button
+                android:id="@+id/img_upload_btn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:text="사진선택"
+                app:cornerRadius="15dp"
+                android:layout_margin="10dp" />
+
 
             <TextView
                 android:id="@+id/productNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:text="상품명"
                 android:textSize="18sp"
                 android:textStyle="bold" />

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter (val context: Context, val ProductList: ArrayList<Product>): BaseAdapter() {
     override fun getCount(): Int {
@@ -24,7 +26,7 @@ class ProductAdapter (val context: Context, val ProductList: ArrayList<Product>)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = LayoutInflater.from(context).inflate(R.layout.item_activity, null)
 
-        val productImage = view.findViewById<ImageView>(R.id.productImage)
+        val imageUrl = view.findViewById<ShapeableImageView>(R.id.imageUrl)
         val productName = view.findViewById<TextView>(R.id.productName)
         val productPrice = view.findViewById<TextView>(R.id.productPrice)
         val maxMember = view.findViewById<TextView>(R.id.maxMember)
@@ -32,11 +34,12 @@ class ProductAdapter (val context: Context, val ProductList: ArrayList<Product>)
 
         val product = ProductList[position]
 
-//        productImage.setImageResource(product.productImage)
         productName.text = product.productName
         productPrice.text = product.productPrice.toString()
         maxMember.text = product.maxMember.toString()
         nowMember.text = product.nowMember.toString()
+        // Glide를 이용하여 ImageView에 url 이미지를 세팅
+        Glide.with(context).load(product.imageUrl).into(imageUrl)
 
         return view
     }
