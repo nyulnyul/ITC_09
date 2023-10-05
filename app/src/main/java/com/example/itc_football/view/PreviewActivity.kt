@@ -19,6 +19,9 @@ class PreviewActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.productName.text = intent.getStringExtra("productName")
+        binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()
+        binding.productImage.setImageResource(intent.getIntExtra("productImage", 0))
         binding.getChatBtn.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
             startActivity(intent)

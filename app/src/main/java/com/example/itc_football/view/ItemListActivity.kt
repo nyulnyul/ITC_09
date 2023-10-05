@@ -51,7 +51,7 @@ class ItemListActivity : AppCompatActivity() {
         binding.listView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 val selectItem = parent.getItemAtPosition(position) as Product
-                intent = Intent(this, DetailedActivity::class.java)
+                intent = Intent(this, PreviewActivity::class.java)
                 intent.putExtra("productName", selectItem.productName)
                 intent.putExtra("productPrice", selectItem.productPrice)
 //                intent.putExtra("productImage", selectItem.productImage)
