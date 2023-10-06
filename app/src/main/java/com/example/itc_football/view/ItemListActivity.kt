@@ -1,4 +1,5 @@
 package com.example.itc_football.view
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.itc_football.Product
 import com.example.itc_football.ProductAdapter
 import com.example.itc_football.R
@@ -16,10 +19,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
 class ItemListActivity : AppCompatActivity() {
     private lateinit var binding: ItemListActivityBinding
     private lateinit var newRecyclerView: RecyclerView
     private val firestore = FirebaseFirestore.getInstance()
+    private var mysrl: SwipeRefreshLayout? = null
 
     private var newProductList = arrayListOf<Product>()
 
@@ -33,9 +38,29 @@ class ItemListActivity : AppCompatActivity() {
         newRecyclerView.layoutManager = LinearLayoutManager(this)
         newRecyclerView.setHasFixedSize(true)
 
+        mysrl = binding.swipeLayout
+        mysrl!!.setOnRefreshListener(OnRefreshListener {
+            newProductList.clear()
+            getProductData()
+            mysrl!!.isRefreshing = false
+        })
+
         // 어댑터를 생성하고 리사이클러뷰에 연결
         val adapter = ProductAdapter(newProductList)
         newRecyclerView.adapter = adapter
+        adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val intent = Intent(this@ItemListActivity, PreviewActivity::class.java)
+                intent.putExtra("productName", newProductList[position].productName)
+                intent.putExtra("productDetail", newProductList[position].productDetail)
+                intent.putExtra("productPrice", newProductList[position].productPrice)
+                intent.putExtra("imageUrl", newProductList[position].imageUrl)
+                intent.putExtra("peopleNum", newProductList[position].maxMember)
+                intent.putExtra("nowMember", newProductList[position].nowMember)
+                startActivity(intent)
+            }
+
+        })
 
         // 데이터를 가져오는 함수 호출
         getProductData()
@@ -54,16 +79,19 @@ class ItemListActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 R.id.bottom_chat -> {
                     val intent = Intent(this, ChatListActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 R.id.bottom_mypage -> {
                     val intent = Intent(this, MyPageActivity::class.java)
                     startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
@@ -85,7 +113,14 @@ class ItemListActivity : AppCompatActivity() {
                     val imageUrl = document.getString("imageUrl")
 
                     if (productName != null && productDetail != null && productPrice != null && imageUrl != null) {
-                        val product = Product(productName, productDetail, productPrice.toInt(), imageUrl, maxMember, nowMember)
+                        val product = Product(
+                            productName,
+                            productDetail,
+                            productPrice.toInt(),
+                            imageUrl,
+                            maxMember,
+                            nowMember
+                        )
                         newProductList.add(product)
                         Log.d("productList", "getProductData: $newProductList")
                     }
@@ -100,6 +135,8 @@ class ItemListActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
+
     }
 
 

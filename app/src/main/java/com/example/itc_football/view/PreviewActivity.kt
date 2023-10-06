@@ -17,6 +17,7 @@ import java.io.File
 class PreviewActivity : AppCompatActivity() {
     private lateinit var binding: PreviewActivityBinding
 //    private lateinit var imageUrl: ImageView
+    private lateinit var imageUrl: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,11 +46,8 @@ class PreviewActivity : AppCompatActivity() {
 //                }
 
 
-//        imageUrl = binding.imageUrl
-//        var imageUrl = intent.getStringExtra("imageUrl")
-//        if (imageUrl != null) {
-//            Glide.with(this).load(imageUrl).into(binding.imageUrl)
-//        }
+        imageUrl = intent.getStringExtra("imageUrl").toString()
+        Glide.with(this).load(imageUrl).into(binding.imageUrl)
         binding.productName.text = intent.getStringExtra("productName")
         binding.productDetail.text = intent.getStringExtra("productDetail")
         binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()

@@ -13,9 +13,19 @@ import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
 
+    private lateinit var mListener : OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(position : Int)
+    }
+
+    fun setOnItemClickListener(listener : OnItemClickListener) {
+        mListener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapter.MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
-        return MyViewHolder(itemView)
+        return MyViewHolder(itemView, mListener)
     }
 
     override fun onBindViewHolder(holder: ProductAdapter.MyViewHolder, position: Int) {
@@ -34,12 +44,18 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         return productList.size
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val imageUrl: ShapeableImageView = itemView.findViewById(R.id.imageUrl)
         val productName: TextView = itemView.findViewById(R.id.productName)
         val productPrice: TextView = itemView.findViewById(R.id.productPrice)
         val maxMember: TextView = itemView.findViewById(R.id.maxMember)
         val nowMember: TextView = itemView.findViewById(R.id.nowMember)
+
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 
     //    override fun getCount(): Int {
