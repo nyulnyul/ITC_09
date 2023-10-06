@@ -6,19 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".view.ItemListActivity">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10.0sp"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_activity" />
+        />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -45,7 +38,7 @@
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="@+id/listView"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:menu="@menu/bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
