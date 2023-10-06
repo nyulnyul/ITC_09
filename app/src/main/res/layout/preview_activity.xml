@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".view.PreviewActivity">
 
+    <include layout="@layout/toolbar"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
