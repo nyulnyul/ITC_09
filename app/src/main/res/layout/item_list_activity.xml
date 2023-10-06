@@ -20,17 +20,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="9dp"
-            android:layout_marginBottom="9dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/recruitBtn"
@@ -38,11 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/bottomNavigation"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             android:backgroundTint="@color/purple"
             android:src="@drawable/baseline_add_24"
-
+            android:contentDescription="방생성 플로팅버튼"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@color/white" />

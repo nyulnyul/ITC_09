@@ -38,6 +38,7 @@ class ItemListActivity : AppCompatActivity() {
         newRecyclerView.layoutManager = LinearLayoutManager(this)
         newRecyclerView.setHasFixedSize(true)
 
+        // 새로고침
         mysrl = binding.swipeLayout
         mysrl!!.setOnRefreshListener(OnRefreshListener {
             newProductList.clear()
@@ -66,11 +67,13 @@ class ItemListActivity : AppCompatActivity() {
         getProductData()
 
 
-//         방생성 버튼 클릭시 이벤트
+        // 방생성 버튼 클릭시 이벤트
         binding.recruitBtn.setOnClickListener() {
             val intent = Intent(this, RecruitRoomActivity::class.java)
             startActivity(intent)
         }
+
+
         binding.bottomNavigation.selectedItemId = binding.bottomNavigation.menu.getItem(0).itemId
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
