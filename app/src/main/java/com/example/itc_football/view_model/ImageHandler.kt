@@ -1,4 +1,4 @@
-package com.example.itc_football
+package com.example.itc_football.view_model
 
 import android.net.Uri
 import com.google.firebase.ktx.Firebase

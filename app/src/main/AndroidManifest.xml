@@ -20,7 +20,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".ProductAdapter"
+            android:name=".view_model.ProductAdapter"
             android:exported="false" />
         <activity
             android:name=".view.LoginActivity"
@@ -34,7 +34,7 @@
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.PreviewActivity" />
-        <activity android:name=".view.ChatActivity" />
+        <activity android:name=".view.ChatActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".view.ItemListActivity" />
         <activity android:name=".view.RecruitRoomActivity" />
         <activity android:name=".view.ChatListActivity" />

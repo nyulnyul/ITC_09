@@ -59,7 +59,9 @@ dependencies {
     implementation("com.google.android.material:material:1.2.0-alpha01")
 
 
+    //socket.io
     implementation("io.socket:socket.io-client:2.0.0"){ exclude(group = "org.json", module = "json")}
+
 
     //gson
     implementation("com.google.code.gson:gson:2.8.9")

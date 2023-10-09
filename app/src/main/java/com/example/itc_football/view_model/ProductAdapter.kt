@@ -1,14 +1,13 @@
-package com.example.itc_football
+package com.example.itc_football.view_model
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.itc_football.view.ItemListActivity
+import com.example.itc_football.model.Product
+import com.example.itc_football.R
 import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
@@ -23,12 +22,12 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
         return MyViewHolder(itemView, mListener)
     }
 
-    override fun onBindViewHolder(holder: ProductAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val currentItem = productList[position]
 

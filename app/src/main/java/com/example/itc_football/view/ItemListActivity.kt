@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import com.example.itc_football.Product
-import com.example.itc_football.ProductAdapter
+import com.example.itc_football.model.Product
+import com.example.itc_football.view_model.ProductAdapter
 import com.example.itc_football.R
 import com.example.itc_football.databinding.ItemListActivityBinding
 import com.google.firebase.firestore.FirebaseFirestore

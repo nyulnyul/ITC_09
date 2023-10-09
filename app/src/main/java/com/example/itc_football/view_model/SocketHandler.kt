@@ -1,7 +1,8 @@
-package com.example.itc_football
+package com.example.itc_football.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.itc_football.model.Chat
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -30,17 +31,14 @@ class SocketHandler {
         socket?.on(CHAT_KEYS.NEW_MESSAGE) {
            it?.let { d ->
                if(d.toString().isNotEmpty()){
-                   val chat = Gson().fromJson(d[0].toString(),Chat::class.java)
+                   val chat = Gson().fromJson(d[0].toString(), Chat::class.java)
                    _onNewChat.postValue(chat)
                }
               }
         }
     }
 
-    fun initAndgetSocket(): Socket? {
 
-        return socket
-    }
 
     fun disconnectSocket() {
         socket?.disconnect()
