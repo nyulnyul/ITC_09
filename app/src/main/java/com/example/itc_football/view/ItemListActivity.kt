@@ -73,6 +73,13 @@ class ItemListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.chatBtn.setOnClickListener() {
+            val email = intent.getStringExtra(ChatActivity.USERNAME) ?: ""
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra(ChatActivity.USERNAME, email)
+            startActivity(intent)
+        }
+
 
         binding.bottomNavigation.selectedItemId = binding.bottomNavigation.menu.getItem(0).itemId
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->

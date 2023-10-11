@@ -28,6 +28,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include" />
 
+        <Button
+            android:id="@+id/chatBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="채팅테스트"
+            app:layout_constraintRight_toLeftOf="@+id/recruitBtn"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"/>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/recruitBtn"
             android:layout_width="wrap_content"

@@ -11,8 +11,9 @@ import java.net.URISyntaxException
 class SocketHandler {
 
     private var socket: Socket? = null
-    private val _onNewChat: MutableLiveData<Chat> = MutableLiveData()
-    val onNewChat :LiveData<Chat> get() = _onNewChat
+
+    private val _onNewChat = MutableLiveData<Chat>()
+    val onNewChat: LiveData<Chat> get() = _onNewChat
 
     init {
         try {
@@ -20,26 +21,25 @@ class SocketHandler {
             socket?.connect()
 
             registerOnNewChat()
-        }catch (e:URISyntaxException){
-            e.printStackTrace()}
-        socket = IO.socket(SOCKET_URL)
-        socket?.connect()
-    }
 
-    private fun registerOnNewChat() {
-        socket?.on(CHAT_KEYS.NEW_MESSAGE) {
-           it?.let { d ->
-               if(d.toString().isNotEmpty()){
-                   val chat = Gson().fromJson(d[0].toString(),Chat::class.java)
-                   _onNewChat.postValue(chat)
-               }
-              }
+        }catch (e: URISyntaxException) {
+            e.printStackTrace()
         }
     }
 
-    fun initAndgetSocket(): Socket? {
+    private fun registerOnNewChat() {
+        socket?.on(CHAT_KEYS.BROADCAST) { args->
+            args?.let { d ->
+                if (d.isNotEmpty()) {
+                    val data = d[0]
+                    if (data.toString().isNotEmpty()) {
+                        val chat = Gson().fromJson(data.toString(), Chat::class.java)
+                        _onNewChat.postValue(chat)
+                    }
+                }
 
-        return socket
+            }
+        }
     }
 
     fun disconnectSocket() {
@@ -47,17 +47,19 @@ class SocketHandler {
         socket?.off()
     }
 
+
     fun emitChat(chat: Chat) {
-        var jsonStr = Gson().toJson(chat, Chat::class.java)
+        val jsonStr = Gson().toJson(chat, Chat::class.java)
         socket?.emit(CHAT_KEYS.NEW_MESSAGE, jsonStr)
     }
 
-
     private object CHAT_KEYS {
         const val NEW_MESSAGE = "new_message"
+        const val BROADCAST = "broadcast"
     }
 
-    companion object {
-        private const val SOCKET_URL = "https://10.0.2.2:3001/"
+    companion object{
+        private const val SOCKET_URL = "http://10.0.2.2:3030/"
     }
+
 }

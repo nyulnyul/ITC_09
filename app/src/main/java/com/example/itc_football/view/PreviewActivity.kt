@@ -45,7 +45,6 @@ class PreviewActivity : AppCompatActivity() {
 //                        .into(binding.imageUrl)
 //                }
 
-
         imageUrl = intent.getStringExtra("imageUrl").toString()
         Glide.with(this).load(imageUrl).into(binding.imageUrl)
         binding.productName.text = intent.getStringExtra("productName")

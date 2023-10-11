@@ -1,7 +1,8 @@
 package com.example.itc_football
 
-class Chat (
-    val username:String,
-    val text:String,
-
-    )
+data class Chat(
+    val username: String,
+    val text: String,
+    val isSelf: Boolean = false
+) {
+}
