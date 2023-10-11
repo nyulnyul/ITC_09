@@ -1,5 +1,6 @@
 package com.example.itc_football.view
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -9,6 +10,9 @@ import com.example.itc_football.Chat
 import com.example.itc_football.ChatAdapter
 import com.example.itc_football.SocketHandler
 import com.example.itc_football.databinding.ChatActivityBinding
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 class ChatActivity : AppCompatActivity() {
@@ -21,6 +25,7 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
+    private val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
@@ -28,6 +33,7 @@ class ChatActivity : AppCompatActivity() {
 
         userName = intent.getStringExtra(USERNAME) ?: ""
 
+        loadChatMessages()
         if (userName.isEmpty()) {
             finish()
         } else {
@@ -40,14 +46,26 @@ class ChatActivity : AppCompatActivity() {
                 adapter = chatAdapter
             }
 
-            binding.sendButton.setOnClickListener {
+            binding.sendButton.setOnClickListener {//채팅을 보내기
                 val message = binding.etMsg.text.toString()
                 if (message.isNotEmpty()) {
                     val chat = Chat(
                         username = userName,
-                        text = message
+                        text = message ,
+                        timestamp = Timestamp.now()
                     )
                     socketHandler.emitChat(chat)
+// Save the chat to Firestore
+                    db.collection("chats").document("msg").collection("messages")
+                        .add(chat)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
+                        }
+
+
                     Log.d("Chatting", "$chat")
                     binding.etMsg.setText("")
                 }
@@ -74,5 +92,23 @@ class ChatActivity : AppCompatActivity() {
     companion object{
         const val USERNAME = "username"
     }
+
+    private fun loadChatMessages() {
+        db.collection("chats").document("msg").collection("messages")
+            .orderBy("timestamp", Query.Direction.ASCENDING)  // Assuming that 'timestamp' field exists in your Chat data class.
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val chat = document.toObject(Chat::class.java)
+                    chatList.add(chat)
+                }
+                chatAdapter.submitChat(chatList)
+                binding.rvChat.scrollToPosition(chatList.size - 1)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }
+
 
 }

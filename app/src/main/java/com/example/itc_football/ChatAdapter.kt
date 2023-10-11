@@ -53,7 +53,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class OtherChatItemViewHolder(val binding: ItemChatOtherBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chat: Chat) {
             binding.apply {
-                name.text = chat.username
+                name.text = chat.username.split("@")[0]
                 msg.text = chat.text
             }
         }
@@ -62,7 +62,7 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class SelfChatItemViewHolder(val binding: ItemChatSelfBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chat: Chat) {
             binding.apply {
-                name.text = chat.username
+                name.text = chat.username.split("@")[0]
                 msg.text = chat.text
             }
         }
