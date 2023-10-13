@@ -99,7 +99,10 @@ class ChatActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val chat = document.toObject(Chat::class.java)
+                    var chat = document.toObject(Chat::class.java)
+                    if (chat.username == userName) {
+                        chat = chat.copy(isSelf = true)
+                    }
                     chatList.add(chat)
                 }
                 chatAdapter.submitChat(chatList)
