@@ -51,7 +51,9 @@ class ItemListActivity : AppCompatActivity() {
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val intent = Intent(this@ItemListActivity, PreviewActivity::class.java)
+                val email = intent.getStringExtra(ChatActivity.USERNAME) ?: ""
+                val intent = Intent(this@ItemListActivity, ChatActivity::class.java)
+                intent.putExtra(ChatActivity.USERNAME, email)
                 intent.putExtra("productName", newProductList[position].productName)
                 intent.putExtra("productDetail", newProductList[position].productDetail)
                 intent.putExtra("productPrice", newProductList[position].productPrice)
