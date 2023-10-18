@@ -37,7 +37,7 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         holder.maxMember.text = currentItem.maxMember.toString()
         holder.nowMember.text = currentItem.nowMember.toString()
         // Glide를 이용하여 ImageView에 url 이미지를 세팅
-        Glide.with(holder.itemView.context).load(currentItem.imageUrl).into(holder.imageUrl)
+//        Glide.with(holder.itemView.context).load(currentItem.imageUrl).into(holder.imageUrl)
     }
 
     override fun getItemCount(): Int {

@@ -57,7 +57,7 @@ class ItemListActivity : AppCompatActivity() {
                 intent.putExtra("productName", newProductList[position].productName)
                 intent.putExtra("productDetail", newProductList[position].productDetail)
                 intent.putExtra("productPrice", newProductList[position].productPrice)
-                intent.putExtra("imageUrl", newProductList[position].imageUrl)
+//                intent.putExtra("imageUrl", newProductList[position].imageUrl)
                 intent.putExtra("peopleNum", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
                 startActivity(intent)
@@ -122,14 +122,13 @@ class ItemListActivity : AppCompatActivity() {
                     val productPrice = document.getLong("productPrice")
                     val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                     val nowMember = document.getLong("nowMember")?.toInt() ?: 0
-                    val imageUrl = document.getString("imageUrl")
+//                    val imageUrl = document.getString("imageUrl")
 
-                    if (productName != null && productDetail != null && productPrice != null && imageUrl != null) {
+                    if (productName != null && productDetail != null && productPrice != null) {
                         val product = Product(
                             productName,
                             productDetail,
                             productPrice.toInt(),
-                            imageUrl,
                             maxMember,
                             nowMember
                         )

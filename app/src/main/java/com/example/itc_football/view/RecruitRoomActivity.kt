@@ -1,9 +1,12 @@
 package com.example.itc_football.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +15,7 @@ import com.example.itc_football.databinding.RecrruitRoomActivityBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -46,36 +50,32 @@ class RecruitRoomActivity : AppCompatActivity() {
 
         // 방 생성 버튼 클릭시 이벤트
         binding.recruitOkBtn.setOnClickListener {
+            addProduct()
+//            imageUpload(productID)
             val intent = Intent(this, ItemListActivity::class.java)
-            addProduct(uri.toString())
             startActivity(intent)
             finish()
         }
     }
 
-    private fun imageUpload(uri: Uri) {
-        // storage 인스턴스 생성
+    private fun imageUpload(productID : String) {
         val storage = Firebase.storage
-        // storage 참조
-        val storageRef = storage.getReference("images")
-        // storage에 저장할 파일명 선언
-        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-        val mountainsRef = storageRef.child("${fileName}.png")
+        val storageRef = storage.reference.child("$productID.png")
 
-        val uploadTask = mountainsRef.putFile(uri)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            // 파일 업로드 성공
-            val imageUrl = uri.toString()
-            addProduct(imageUrl)
-            Toast.makeText(this, "사진 업로드 성공", Toast.LENGTH_SHORT).show();
-        }.addOnFailureListener {
-            // 파일 업로드 실패
-            Toast.makeText(this, "사진 업로드 실패", Toast.LENGTH_SHORT).show();
-        }
+        binding.imgProduct.isDrawingCacheEnabled = true
+        binding.imgProduct.buildDrawingCache()
+        val bitmap = (binding.imgProduct.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        var uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+        }.addOnSuccessListener { taskSnapshot -> }
     }
 
-    // 방 생성 메서드
-    private fun addProduct(imageUrl: String) {
+//     방 생성 메서드
+    private fun addProduct() {
         val productCollection = firestore.collection("product")
 
         // 사용자가 입력한 정보를 가져와서 Firebase Firestore에 추가합니다.
@@ -84,7 +84,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         val productPrice = binding.productPrice.text.toString().toLong()
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
-        val imageUrl = uri.toString()
+//        val imageUrl = uri.toString()
 
         val productData = hashMapOf(
             "productName" to productName,
@@ -92,21 +92,22 @@ class RecruitRoomActivity : AppCompatActivity() {
             "productPrice" to productPrice,
             "maxMember" to maxMember,
             "nowMember" to nowMember,
-            "imageUrl" to imageUrl
+//            "imageUrl" to imageUrl
         )
 
         productCollection.add(productData)
             .addOnSuccessListener { documentReference ->
                 // 성공적으로 추가된 경우
-                val productId = documentReference.id
+                val productID = documentReference.id
                 // 추가 작업을 수행하거나 다른 화면으로 이동할 수 있습니다.
-//                documentReference.update("productId", productId)
-//                    .addOnSuccessListener {
-//                        // 도큐먼트 ID가 업데이트된 경우
-//                    }
-//                    .addOnFailureListener { e ->
-//                        // 업데이트 실패 시 처리
-//                    }
+                documentReference.update("productID", productID)
+                    .addOnSuccessListener {
+                        // 업데이트 성공 시 처리
+                        imageUpload(productID)
+                    }
+                    .addOnFailureListener { e ->
+                        // 업데이트 실패 시 처리
+                    }
 
             }
             .addOnFailureListener { e ->
