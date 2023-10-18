@@ -122,15 +122,17 @@ class ItemListActivity : AppCompatActivity() {
                     val productPrice = document.getLong("productPrice")
                     val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                     val nowMember = document.getLong("nowMember")?.toInt() ?: 0
+                    val productID = document.getString("productID")
 //                    val imageUrl = document.getString("imageUrl")
 
-                    if (productName != null && productDetail != null && productPrice != null) {
+                    if (productName != null && productDetail != null && productPrice != null && productID != null) {
                         val product = Product(
                             productName,
                             productDetail,
                             productPrice.toInt(),
                             maxMember,
-                            nowMember
+                            nowMember,
+                            productID,
                         )
                         newProductList.add(product)
                         Log.d("productList", "getProductData: $newProductList")

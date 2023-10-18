@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
@@ -24,6 +26,7 @@ class RecruitRoomActivity : AppCompatActivity() {
     private val firestore = FirebaseFirestore.getInstance()
     private lateinit var uri: Uri
     private lateinit var activityLauncher: ActivityResultLauncher<Intent>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +53,26 @@ class RecruitRoomActivity : AppCompatActivity() {
 
         // 방 생성 버튼 클릭시 이벤트
         binding.recruitOkBtn.setOnClickListener {
-            addProduct()
-//            imageUpload(productID)
+            addProductWithDelay()
+//            addProduct()
+////            imageUpload(productID)
+//            val intent = Intent(this, ItemListActivity::class.java)
+//            startActivity(intent)
+//            finish()
+        }
+    }
+    // 리스트에 업데이트 하는데에 시간이 걸림. 딜레이를 줘서 업데이트가 되도록 함
+    private fun addProductWithDelay() {
+        addProduct() // 방 생성 메서드 호출
+        // 딜레이를 주고 다음 액티비티로 이동
+        Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, ItemListActivity::class.java)
             startActivity(intent)
             finish()
-        }
+        }, 3000) // 2000 밀리초 (2초) 딜레이
     }
 
-    private fun imageUpload(productID : String) {
+    private fun imageUpload(productID: String) {
         val storage = Firebase.storage
         val storageRef = storage.reference.child("$productID.png")
 
@@ -74,7 +88,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         }.addOnSuccessListener { taskSnapshot -> }
     }
 
-//     방 생성 메서드
+    //     방 생성 메서드
     private fun addProduct() {
         val productCollection = firestore.collection("product")
 
@@ -84,7 +98,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         val productPrice = binding.productPrice.text.toString().toLong()
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
-//        val imageUrl = uri.toString()
+        // val imageUrl = uri.toString()
 
         val productData = hashMapOf(
             "productName" to productName,
@@ -92,7 +106,7 @@ class RecruitRoomActivity : AppCompatActivity() {
             "productPrice" to productPrice,
             "maxMember" to maxMember,
             "nowMember" to nowMember,
-//            "imageUrl" to imageUrl
+            // "imageUrl" to imageUrl
         )
 
         productCollection.add(productData)
@@ -104,14 +118,18 @@ class RecruitRoomActivity : AppCompatActivity() {
                     .addOnSuccessListener {
                         // 업데이트 성공 시 처리
                         imageUpload(productID)
+                        // 여기서 다음 액티비티로 이동
+//                        val intent = Intent(this, ItemListActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
                     }
                     .addOnFailureListener { e ->
                         // 업데이트 실패 시 처리
                     }
-
             }
             .addOnFailureListener { e ->
-                // 추가 실패 시 처리
+                // 추가
+
             }
     }
 }

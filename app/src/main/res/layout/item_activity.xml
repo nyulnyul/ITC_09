@@ -20,7 +20,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/imageUrl"
+            android:id="@+id/img_product"
             android:src="@drawable/baseline_mode_24"
             android:scaleType="centerCrop"
             android:layout_marginStart="10dp"
@@ -36,7 +36,7 @@
             android:textSize="17sp"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/imageUrl"/>
+            android:layout_toEndOf="@+id/img_product"/>
 
         <TextView
             android:id="@+id/productPrice"
@@ -47,7 +47,7 @@
             android:textStyle="bold"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@+id/imageUrl"/>
+            android:layout_toEndOf="@+id/img_product"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

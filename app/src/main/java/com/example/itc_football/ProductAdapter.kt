@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.itc_football.view.ItemListActivity
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
 
@@ -36,6 +38,11 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         holder.productPrice.text = currentItem.productPrice.toString()
         holder.maxMember.text = currentItem.maxMember.toString()
         holder.nowMember.text = currentItem.nowMember.toString()
+
+        val storageRef = Firebase.storage.reference.child("${currentItem.productID}.png")
+        storageRef.downloadUrl.addOnSuccessListener {
+            Glide.with(holder.itemView.context).load(it).into(holder.imgProduct)
+        }
         // Glide를 이용하여 ImageView에 url 이미지를 세팅
 //        Glide.with(holder.itemView.context).load(currentItem.imageUrl).into(holder.imageUrl)
     }
@@ -45,7 +52,7 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
     }
 
     class MyViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
-        val imageUrl: ShapeableImageView = itemView.findViewById(R.id.imageUrl)
+        val imgProduct: ShapeableImageView = itemView.findViewById(R.id.img_product)
         val productName: TextView = itemView.findViewById(R.id.productName)
         val productPrice: TextView = itemView.findViewById(R.id.productPrice)
         val maxMember: TextView = itemView.findViewById(R.id.maxMember)
