@@ -25,6 +25,7 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
+    private val productID = intent.getStringExtra("productID")
 //    val productName = intent.getStringExtra("productName")
 //    val productPrice = intent.getStringExtra("productPrice")
 
