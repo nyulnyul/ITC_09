@@ -51,17 +51,18 @@ class ItemListActivity : AppCompatActivity() {
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val email = intent.getStringExtra(ChatActivity.USERNAME) ?: ""
-                val intent = Intent(this@ItemListActivity, ChatActivity::class.java)
-                intent.putExtra(ChatActivity.USERNAME, email)
+
+                val intent = Intent(this@ItemListActivity, PreviewActivity::class.java)
+
                 intent.putExtra("productID", newProductList[position].productID)
                 intent.putExtra("productName", newProductList[position].productName)
                 intent.putExtra("productDetail", newProductList[position].productDetail)
                 intent.putExtra("productPrice", newProductList[position].productPrice)
-//                intent.putExtra("imageUrl", newProductList[position].imageUrl)
+
                 intent.putExtra("peopleNum", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
                 startActivity(intent)
+                Log.e("TAG", "onItemClick: " + newProductList[position].productID)
             }
 
         })
