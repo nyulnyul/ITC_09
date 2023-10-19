@@ -14,6 +14,8 @@ import com.example.itc_football.Chat
 import com.example.itc_football.databinding.PreviewActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import java.io.File
 
 class PreviewActivity : AppCompatActivity() {
@@ -29,13 +31,18 @@ class PreviewActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        val productID = intent.getStringExtra("productID")
+        val storage = Firebase.storage.reference.child("${productID}.png")
+        storage.downloadUrl.addOnSuccessListener {
+            Glide.with(this).load(it).into(binding.imageUrl)
+        }
+
 //        Glide.with(this).load(imageUrl).into(binding.imageUrl)
         binding.productName.text = intent.getStringExtra("productName")
         binding.productDetail.text = intent.getStringExtra("productDetail")
         binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()
         binding.nowMember.text = intent.getIntExtra("nowMember", 0).toString()
         binding.maxMember.text = intent.getIntExtra("maxMember", 0).toString()
-        val productID = intent.getStringExtra("productID")
         Log.d("productPrice1", "${intent.getIntExtra("productPrice", 0)}")
 
         binding.getChatBtn.setOnClickListener {
