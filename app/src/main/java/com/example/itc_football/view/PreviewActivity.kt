@@ -36,7 +36,7 @@ class PreviewActivity : AppCompatActivity() {
         binding.nowMember.text = intent.getIntExtra("nowMember", 0).toString()
         binding.maxMember.text = intent.getIntExtra("maxMember", 0).toString()
         val productID = intent.getStringExtra("productID")
-
+        Log.d("productPrice1", "${intent.getIntExtra("productPrice", 0)}")
 
         binding.getChatBtn.setOnClickListener {
 
@@ -49,6 +49,7 @@ class PreviewActivity : AppCompatActivity() {
             intent.putExtra("productName", binding.productName.text.toString())
             intent.putExtra("productDetail", binding.productDetail.text.toString())
             intent.putExtra("productPrice",  binding.productPrice.text.toString())
+            Log.d("productPrice2", binding.productPrice.text.toString())
             intent.putExtra("peopleNum", binding.maxMember.text.toString())
             intent.putExtra("nowMember", binding.nowMember.text.toString())
 
