@@ -25,7 +25,7 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
-    private val productID = intent.getStringExtra("productID")
+//    private val productID = intent.getStringExtra("productID")
 //    val productName = intent.getStringExtra("productName")
 //    val productPrice = intent.getStringExtra("productPrice")
 
@@ -36,6 +36,7 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val productID = intent.getStringExtra("productID")
         userName = intent.getStringExtra(USERNAME) ?: ""
 
         binding.productName.text = intent.getStringExtra("productName")

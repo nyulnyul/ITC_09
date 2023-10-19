@@ -44,7 +44,6 @@ class PreviewActivity : AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             val email = user?.email ?: ""
 
-
             intent.putExtra(ChatActivity.USERNAME, email)
             intent.putExtra("productID", productID)
             intent.putExtra("productName", binding.productName.text.toString())
