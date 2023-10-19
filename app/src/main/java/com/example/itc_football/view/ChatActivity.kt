@@ -40,8 +40,8 @@ class ChatActivity : AppCompatActivity() {
         userName = intent.getStringExtra(USERNAME) ?: ""
 
         binding.productName.text = intent.getStringExtra("productName")
-        binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()
-
+        binding.productPrice.text = intent.getStringExtra("productPrice")
+        Log.d("productPrice", binding.productPrice.text.toString())
         loadChatMessages()
 
 //        binding.productName.text = productName
