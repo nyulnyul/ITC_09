@@ -25,17 +25,26 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
+//    val productName = intent.getStringExtra("productName")
+//    val productPrice = intent.getStringExtra("productPrice")
+
     private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val productID = intent.getStringExtra("productID")
-
         userName = intent.getStringExtra(USERNAME) ?: ""
 
+        binding.productName.text = intent.getStringExtra("productName")
+        binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()
+
         loadChatMessages()
+
+//        binding.productName.text = productName
+//        binding.productPrice.text = productPrice
+
         if (userName.isEmpty()) {
             finish()
         } else {
@@ -53,7 +62,7 @@ class ChatActivity : AppCompatActivity() {
                 if (message.isNotEmpty()) {
                     val chat = Chat(
                         username = userName,
-                        text = message ,
+                        text = message,
                         timestamp = Timestamp.now()
                     )
                     socketHandler.emitChat(chat)
@@ -90,13 +99,16 @@ class ChatActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    companion object{
+    companion object {
         const val USERNAME = "username"
     }
 
     private fun loadChatMessages() {
         db.collection("chats").document("msg").collection("messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING)  // Assuming that 'timestamp' field exists in your Chat data class.
+            .orderBy(
+                "timestamp",
+                Query.Direction.ASCENDING
+            )  // Assuming that 'timestamp' field exists in your Chat data class.
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
