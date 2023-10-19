@@ -113,14 +113,6 @@
                         android:text="손흥민 유니폼 공구"
                         android:textSize="23dp" />
 
-                    <TextView
-                        android:id="@+id/productNeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        android:text="1/4"
-                        android:textSize="18dp" />
 
                 </LinearLayout>
 

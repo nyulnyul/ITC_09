@@ -62,7 +62,7 @@ class ItemListActivity : AppCompatActivity() {
                 intent.putExtra("productDetail", newProductList[position].productDetail)
                 intent.putExtra("productPrice", newProductList[position].productPrice)
 
-                intent.putExtra("peopleNum", newProductList[position].maxMember)
+                intent.putExtra("maxMember", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
                 startActivity(intent)
                 Log.e("TAG", "onItemClick: " + newProductList[position].productID)
@@ -133,6 +133,7 @@ class ItemListActivity : AppCompatActivity() {
                             maxMember,
                             nowMember,
                             productID,
+                            
                         )
                         newProductList.add(product)
                         Log.d("productList", "getProductData: $newProductList")
