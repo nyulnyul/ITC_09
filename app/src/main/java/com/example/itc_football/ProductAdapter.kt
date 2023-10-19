@@ -1,5 +1,6 @@
 package com.example.itc_football
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,12 +31,13 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         return MyViewHolder(itemView, mListener)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductAdapter.MyViewHolder, position: Int) {
 
         val currentItem = productList[position]
 
         holder.productName.text = currentItem.productName
-        holder.productPrice.text = currentItem.productPrice.toString()
+        holder.productPrice.text = "${currentItem.productPrice}원"
         holder.maxMember.text = currentItem.maxMember.toString()
         holder.nowMember.text = currentItem.nowMember.toString()
 

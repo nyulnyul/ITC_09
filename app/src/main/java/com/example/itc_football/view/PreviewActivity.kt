@@ -1,5 +1,6 @@
 package com.example.itc_football.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,7 @@ class PreviewActivity : AppCompatActivity() {
     private lateinit var imageUrl: String
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PreviewActivityBinding.inflate(layoutInflater)
@@ -40,7 +42,7 @@ class PreviewActivity : AppCompatActivity() {
 //        Glide.with(this).load(imageUrl).into(binding.imageUrl)
         binding.productName.text = intent.getStringExtra("productName")
         binding.productDetail.text = intent.getStringExtra("productDetail")
-        binding.productPrice.text = intent.getIntExtra("productPrice", 0).toString()
+        binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
         binding.nowMember.text = intent.getIntExtra("nowMember", 0).toString()
         binding.maxMember.text = intent.getIntExtra("maxMember", 0).toString()
         Log.d("productPrice1", "${intent.getIntExtra("productPrice", 0)}")

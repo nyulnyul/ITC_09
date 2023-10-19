@@ -6,6 +6,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.itc_football.Chat
 import com.example.itc_football.ChatAdapter
 import com.example.itc_football.SocketHandler
@@ -13,6 +14,8 @@ import com.example.itc_football.databinding.ChatActivityBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 class ChatActivity : AppCompatActivity() {
@@ -25,10 +28,6 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
-//    private val productID = intent.getStringExtra("productID")
-//    val productName = intent.getStringExtra("productName")
-//    val productPrice = intent.getStringExtra("productPrice")
-
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +35,19 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // productID를 받아옴
         val productID = intent.getStringExtra("productID")
         userName = intent.getStringExtra(USERNAME) ?: ""
 
+        // productID를 이용하여 스토리지에서 이미지를 다운로드
+        val storage = Firebase.storage.reference.child("${productID}.png")
+        storage.downloadUrl.addOnSuccessListener {
+            Glide.with(this).load(it).into(binding.imgProduct)
+        }
+
         binding.productName.text = intent.getStringExtra("productName")
         binding.productPrice.text = intent.getStringExtra("productPrice")
-        Log.d("productPrice", binding.productPrice.text.toString())
         loadChatMessages()
-
-//        binding.productName.text = productName
-//        binding.productPrice.text = productPrice
 
         if (userName.isEmpty()) {
             finish()
