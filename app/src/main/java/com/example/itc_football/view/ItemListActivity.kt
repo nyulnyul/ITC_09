@@ -54,6 +54,7 @@ class ItemListActivity : AppCompatActivity() {
                 val email = intent.getStringExtra(ChatActivity.USERNAME) ?: ""
                 val intent = Intent(this@ItemListActivity, ChatActivity::class.java)
                 intent.putExtra(ChatActivity.USERNAME, email)
+                intent.putExtra("productID", newProductList[position].productID)
                 intent.putExtra("productName", newProductList[position].productName)
                 intent.putExtra("productDetail", newProductList[position].productDetail)
                 intent.putExtra("productPrice", newProductList[position].productPrice)

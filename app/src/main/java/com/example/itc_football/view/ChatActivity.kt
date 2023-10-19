@@ -31,6 +31,8 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val productID = intent.getStringExtra("productID")
+
         userName = intent.getStringExtra(USERNAME) ?: ""
 
         loadChatMessages()
@@ -82,7 +84,6 @@ class ChatActivity : AppCompatActivity() {
 
 
     }
-
 
     override fun onDestroy() {
         socketHandler.disconnectSocket()
