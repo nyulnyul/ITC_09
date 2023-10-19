@@ -67,14 +67,16 @@ class ChatActivity : AppCompatActivity() {
                     )
                     socketHandler.emitChat(chat)
 // Save the chat to Firestore
-                    db.collection("chats").document("msg").collection("messages")
-                        .add(chat)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
+                    if (productID != null) {
+                        db.collection("product").document(productID).collection("msg")
+                            .add(chat)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+                    }
 
 
                     Log.d("Chatting", "$chat")
@@ -104,26 +106,26 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun loadChatMessages() {
-        db.collection("chats").document("msg").collection("messages")
-            .orderBy(
-                "timestamp",
-                Query.Direction.ASCENDING
-            )  // Assuming that 'timestamp' field exists in your Chat data class.
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    var chat = document.toObject(Chat::class.java)
-                    if (chat.username == userName) {
-                        chat = chat.copy(isSelf = true)
+        val productID = intent.getStringExtra("productID")
+        if (productID != null) {
+            db.collection("product").document(productID).collection("msg")
+                .orderBy("timestamp", Query.Direction.ASCENDING)  // Assuming that 'timestamp' field exists in your Chat data class.
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        var chat = document.toObject(Chat::class.java)
+                        if (chat.username == userName) {
+                            chat = chat.copy(isSelf = true)
+                        }
+                        chatList.add(chat)
                     }
-                    chatList.add(chat)
+                    chatAdapter.submitChat(chatList)
+                    binding.rvChat.scrollToPosition(chatList.size - 1)
                 }
-                chatAdapter.submitChat(chatList)
-                binding.rvChat.scrollToPosition(chatList.size - 1)
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-            }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "Error getting documents.", exception)
+                }
+        }
     }
 
 
