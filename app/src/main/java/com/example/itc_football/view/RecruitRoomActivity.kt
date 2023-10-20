@@ -1,5 +1,7 @@
 package com.example.itc_football.view
 
+import Firebase_Auth.db
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -14,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.itc_football.databinding.RecrruitRoomActivityBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -26,6 +29,9 @@ class RecruitRoomActivity : AppCompatActivity() {
     private val firestore = FirebaseFirestore.getInstance()
     private lateinit var uri: Uri
     private lateinit var activityLauncher: ActivityResultLauncher<Intent>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private var userName = ""
+    private var maker = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +97,22 @@ class RecruitRoomActivity : AppCompatActivity() {
     //     방 생성 메서드
     private fun addProduct() {
         val productCollection = firestore.collection("product")
+        val user = firebaseAuth.currentUser
+        val uid = user?.uid ?: ""
+        if (user != null) {
+            db.collection("users").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        userName = document.data?.get("name").toString()
+                    } else {
+                        Log.d(ContentValues.TAG, "로그인 때 유저 닉네임 가져오기 실패")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "로그인 때 users DB가져오기 실패", exception)
+                }
+        }
+        maker = "${uid}_$userName"
 
         // 사용자가 입력한 정보를 가져와서 Firebase Firestore에 추가합니다.
         val productName = binding.productName.text.toString()
@@ -98,6 +120,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         val productPrice = binding.productPrice.text.toString().toLong()
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
+        val maker = maker
         // val imageUrl = uri.toString()
 
         val productData = hashMapOf(
@@ -106,6 +129,7 @@ class RecruitRoomActivity : AppCompatActivity() {
             "productPrice" to productPrice,
             "maxMember" to maxMember,
             "nowMember" to nowMember,
+            "maker" to maker,
             // "imageUrl" to imageUrl
         )
 

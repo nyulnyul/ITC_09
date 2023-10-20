@@ -12,6 +12,7 @@ import com.example.itc_football.ChatAdapter
 import com.example.itc_football.SocketHandler
 import com.example.itc_football.databinding.ChatActivityBinding
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
@@ -28,12 +29,33 @@ class ChatActivity : AppCompatActivity() {
 
     private var userName = ""
 
+    private lateinit var firebaseAuth: FirebaseAuth
     private val db = FirebaseFirestore.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        val user = firebaseAuth.currentUser
+        if (user != null) {
+            db.collection("users").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        userName = document.data?.get("name").toString()
+                        Log.d(TAG, "userName: $userName")
+                    } else {
+                        Log.d(TAG, "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "get failed with ", exception)
+                }
+        }
+
+
 
         // productID를 받아옴
         val productID = intent.getStringExtra("productID")
