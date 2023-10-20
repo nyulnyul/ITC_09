@@ -31,14 +31,31 @@ class RecruitRoomActivity : AppCompatActivity() {
     private lateinit var activityLauncher: ActivityResultLauncher<Intent>
     private lateinit var firebaseAuth: FirebaseAuth
     private var userName = ""
-    private var maker = ""
-
+    private var roomMaker = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = RecrruitRoomActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid ?: ""
+        if (user != null) {
+            db.collection("users").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        userName = document.data?.get("name").toString()
+                        roomMaker = "${uid}_${userName}"
+                        Log.d("maker : ", roomMaker)
+                    } else {
+                        Log.d(ContentValues.TAG, "로그인 때 유저 닉네임 가져오기 실패")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(ContentValues.TAG, "로그인 때 users DB가져오기 실패", exception)
+                }
+        }
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -69,6 +86,7 @@ class RecruitRoomActivity : AppCompatActivity() {
 //            finish()
         }
     }
+
     // 리스트에 업데이트 하는데에 시간이 걸림. 딜레이를 줘서 업데이트가 되도록 함
     private fun addProductWithDelay() {
         addProduct() // 방 생성 메서드 호출
@@ -100,21 +118,7 @@ class RecruitRoomActivity : AppCompatActivity() {
     private fun addProduct() {
         val productCollection = firestore.collection("product")
         val user = firebaseAuth.currentUser
-        val uid = user?.uid ?: ""
-        if (user != null) {
-            db.collection("users").document(user.uid).get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        userName = document.data?.get("name").toString()
-                    } else {
-                        Log.d(ContentValues.TAG, "로그인 때 유저 닉네임 가져오기 실패")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(ContentValues.TAG, "로그인 때 users DB가져오기 실패", exception)
-                }
-        }
-        maker = "${uid}_$userName"
+
 
         // 사용자가 입력한 정보를 가져와서 Firebase Firestore에 추가합니다.
         val productName = binding.productName.text.toString()
@@ -122,8 +126,8 @@ class RecruitRoomActivity : AppCompatActivity() {
         val productPrice = binding.productPrice.text.toString().toLong()
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
-        val maker = maker
-        // val imageUrl = uri.toString()
+        val maker = roomMaker
+        Log.d("roomMaker2 : ", roomMaker)
 
         val productData = hashMapOf(
             "productName" to productName,
