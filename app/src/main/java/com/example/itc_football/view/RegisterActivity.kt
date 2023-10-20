@@ -14,6 +14,10 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: RegisterActivityBinding
     private lateinit var firebaseAuth: FirebaseAuth
+//    private val departments = arrayOf("기계공학과", "기계설계공학과", "메카트로닉스공학과", "반도체기계정비학과", "조선기계공학과",
+//        "항공기계공학과", "자동차공학과", "전기공학과", "전자공학과", "컴퓨터정보공학과", "컴퓨터시스템공학과", "디지털마케팅공학과",
+//        "건설환경공학과", "공간정보빅데이터학과", "화학생명공학과", "재료공학과", "건축학과", "실내건축학과", "산업디자인학과",
+//        "패션디자인학과", "항공운항과", "항공경영학과", "관광경영학과", "경영비서학과", "호텔경영학과", "물류시스템학과", "스포츠헬스케어학과")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.regPassword.text.toString()
             val confirmPassword = binding.regCheckpassword.text.toString()
             val name = binding.regName.text.toString()
-            val dept = binding.regDept.text.toString()
+            val dept = binding.regDept.selectedItem.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && name.isNotEmpty() && dept.isNotEmpty()) {
                 if (password == confirmPassword) {
