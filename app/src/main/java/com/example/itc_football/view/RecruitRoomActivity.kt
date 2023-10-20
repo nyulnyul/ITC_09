@@ -40,6 +40,8 @@ class RecruitRoomActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
         // 이미지 업로드 버튼 클릭시 결과 (파일 업로드)
         activityLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
