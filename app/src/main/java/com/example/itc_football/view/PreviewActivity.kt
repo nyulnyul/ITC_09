@@ -1,6 +1,7 @@
 package com.example.itc_football.view
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -62,7 +63,30 @@ class PreviewActivity : AppCompatActivity() {
             intent.putExtra("peopleNum", binding.maxMember.text.toString())
             intent.putExtra("nowMember", binding.nowMember.text.toString())
 
-            startActivity(intent)
+
+            if (user != null) {
+                val productCollection = FirebaseFirestore.getInstance().collection("product")
+                val memberCollection = productCollection.document(productID!!).collection("member")
+
+                memberCollection.document(user.uid).get()
+                    .addOnSuccessListener { document ->
+                        if (!document.exists()) {
+                            // 현재 유저의 uid가 아직 'member' 컬렉션에 없으므로 추가합니다.
+                            memberCollection.document(user.uid).set(hashMapOf("uid" to user.uid))
+                                .addOnSuccessListener {
+                                    Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(ContentValues.TAG, "Error writing document", e)
+                                }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(ContentValues.TAG, "get failed with ", exception)
+                    }
+            }
+
+                startActivity(intent)
         }
 
     }
