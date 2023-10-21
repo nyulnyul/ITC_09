@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".view.ChatActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -43,8 +42,8 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/light_gray"
+        android:layout_height="1dp"
+        android:background="@color/black"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@+id/img_product"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,15 +60,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="3dp"
-        android:background="@color/light_gray"
-        app:layout_constraintTop_toBottomOf="@+id/rv_chat"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+<!--    <View-->
+<!--        android:id="@+id/view2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:layout_marginTop="3dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:background="@color/light_gray"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/rv_chat"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
 <!--    <LinearLayout-->
 <!--        android:id="@+id/sendMessageLayout"-->
@@ -106,17 +107,18 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
-        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/etMsg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginRight="5dp"
-            android:background="@drawable/custom_edittext"
+            android:layout_weight="1"
+            android:background="@drawable/custom_edittext2"
             android:hint="메세지 입력"
             android:paddingLeft="15dp"
             android:textSize="18dp" />
@@ -125,10 +127,10 @@
             android:id="@+id/sendButton"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:text="↑"
-            android:textColor="#ffffff"
             android:background="@drawable/rounded_button"
             android:drawableTop="@drawable/baseline_arrow_upward_24"
+            android:text="↑"
+            android:textColor="#ffffff"
             android:textSize="16dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

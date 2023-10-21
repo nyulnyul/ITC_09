@@ -59,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
 
         // productID를 받아옴
         val productID = intent.getStringExtra("productID")
-        userName = intent.getStringExtra(USERNAME) ?: ""
+//        userName = intent.getStringExtra(USERNAME) ?: ""
 
         // productID를 이용하여 스토리지에서 이미지를 다운로드
         val storage = Firebase.storage.reference.child("${productID}.png")
@@ -92,7 +92,7 @@ class ChatActivity : AppCompatActivity() {
                         timestamp = Timestamp.now()
                     )
                     socketHandler.emitChat(chat)
-// Save the chat to Firestore
+                    // Save the chat to Firestore
                     if (productID != null) {
                         db.collection("product").document(productID).collection("msg")
                             .add(chat)
