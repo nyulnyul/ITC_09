@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/app_bar_bg"
+    android:background="@color/white"
     android:elevation="4dp"
     >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/appname"
-        android:textStyle="italic"
-        android:textColor="@color/white"
+        android:textStyle="italic|bold"
+        android:textColor="@color/black"
         android:layout_marginLeft="10dp"
         android:textSize="24sp"/>
 

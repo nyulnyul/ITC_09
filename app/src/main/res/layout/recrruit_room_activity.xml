@@ -27,16 +27,17 @@
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:src="@drawable/camera"
                 app:shapeAppearanceOverlay="@style/roundImage"
                 />
 
             <Button
                 android:id="@+id/img_upload_btn"
                 android:layout_width="120dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:text="사진선택"
-                app:cornerRadius="15dp"
+                app:cornerRadius="10dp"
+                android:backgroundTint="@color/purple"
                 android:layout_margin="10dp" />
 
 
@@ -150,7 +151,7 @@
                 android:layout_height="60dp"
                 android:backgroundTint="@color/purple"
                 android:text="방만들기"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:cornerRadius="10dp" />
         </LinearLayout>
