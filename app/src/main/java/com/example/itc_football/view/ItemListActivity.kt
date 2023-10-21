@@ -77,7 +77,7 @@ class ItemListActivity : AppCompatActivity() {
         }
 
 
-        binding.bottomNavigation.selectedItemId = binding.bottomNavigation.menu.getItem(0).itemId
+        binding.bottomNavigation.selectedItemId = R.id.bottom_home
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> {

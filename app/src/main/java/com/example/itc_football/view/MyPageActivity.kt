@@ -53,7 +53,7 @@ class MyPageActivity : AppCompatActivity() {
 
 
 
-        binding.bottomNavigation.selectedItemId = binding.bottomNavigation.menu.getItem(2).itemId
+        binding.bottomNavigation.selectedItemId = R.id.bottom_mypage
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> {
