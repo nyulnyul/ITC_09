@@ -1,11 +1,11 @@
-package com.example.itc_football
+package com.example.itc_football.viewmodel
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.itc_football.data.Chat
 import com.example.itc_football.databinding.ItemChatOtherBinding
 import com.example.itc_football.databinding.ItemChatSelfBinding
 

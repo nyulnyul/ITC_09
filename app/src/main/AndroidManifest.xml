@@ -20,7 +20,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".ProductAdapter"
+            android:name=".viewmodel.ProductAdapter"
             android:exported="false" />
         <activity
             android:name=".view.LoginActivity"

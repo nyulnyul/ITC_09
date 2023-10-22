@@ -3,22 +3,15 @@ package com.example.itc_football.view
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.itc_football.Chat
 import com.example.itc_football.databinding.PreviewActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.io.File
 
 class PreviewActivity : AppCompatActivity() {
     private lateinit var binding: PreviewActivityBinding

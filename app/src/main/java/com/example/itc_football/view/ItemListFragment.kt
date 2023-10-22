@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.itc_football.Product
-import com.example.itc_football.ProductAdapter
+import com.example.itc_football.data.Product
+import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.databinding.ItemListFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope

@@ -2,14 +2,13 @@ package com.example.itc_football.view
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.itc_football.Chat
-import com.example.itc_football.ChatAdapter
-import com.example.itc_football.SocketHandler
+import com.example.itc_football.data.Chat
+import com.example.itc_football.viewmodel.ChatAdapter
+import com.example.itc_football.viewmodel.SocketHandler
 import com.example.itc_football.databinding.ChatActivityBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
