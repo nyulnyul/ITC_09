@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
-                            val intent = Intent(this, ItemListActivity::class.java)
+                            val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra(ChatActivity.USERNAME, userName)
                             startActivity(intent)
                             finish()

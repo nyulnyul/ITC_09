@@ -33,12 +33,12 @@
         </activity>
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.ItemListFragment" />
         <activity android:name=".view.PreviewActivity" />
         <activity android:name=".view.ChatActivity" />
-        <activity android:name=".view.ItemListActivity" />
+        <activity android:name=".view.ChatListFragment" />
         <activity android:name=".view.RecruitRoomActivity" />
-        <activity android:name=".view.ChatListActivity" />
-        <activity android:name=".view.MyPageActivity" />
+        <activity android:name=".view.MyPageFragment" />
 
 
     </application>

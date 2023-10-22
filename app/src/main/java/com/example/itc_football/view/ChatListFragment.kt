@@ -4,15 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.itc_football.data.Product
-import com.example.itc_football.viewmodel.ProductAdapter
-import com.example.itc_football.R
 import com.example.itc_football.data.MyChat
-import com.example.itc_football.databinding.ChatListActivityBinding
+import com.example.itc_football.databinding.ChatListFragmentBinding
 import com.example.itc_football.viewmodel.MyChatAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,84 +22,64 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class ChatListActivity : AppCompatActivity() {
-    private lateinit var binding: ChatListActivityBinding
+class ChatListFragment : Fragment() {
+    private lateinit var binding: ChatListFragmentBinding
     private lateinit var newRecyclerView: RecyclerView
     private val firestore = FirebaseFirestore.getInstance()
     private var mysrl: SwipeRefreshLayout? = null
 
     private var newProductList = arrayListOf<MyChat>()
+    private var isDataLoaded = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ChatListActivityBinding.inflate(layoutInflater)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = ChatListFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        setContentView(view)
-
-        // 데이터를 가져오는 함수 호출
-        getChatData()
 
         newRecyclerView = binding.recyclerView
-        newRecyclerView.layoutManager = LinearLayoutManager(this)
+        newRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         newRecyclerView.setHasFixedSize(true)
 
         // 새로고침
         mysrl = binding.swipeLayout
         mysrl!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
-            newProductList.clear()
-            getChatData()
-            mysrl!!.isRefreshing = false
+//            newProductList.clear()
+//            getChatData()
+//            mysrl!!.isRefreshing = false
+            refreshData()
         })
+
+        if (!isDataLoaded) {
+            // 데이터를 가져오기
+            getChatData()
+        }
 
         // 어댑터를 생성하고 리사이클러뷰에 연결
         val adapter = MyChatAdapter(newProductList)
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : MyChatAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-
-                val intent = Intent(this@ChatListActivity, PreviewActivity::class.java)
-
+                val intent = Intent(requireContext(), PreviewActivity::class.java)
                 intent.putExtra("productID", newProductList[position].productID)
                 intent.putExtra("productName", newProductList[position].productName)
                 intent.putExtra("userName", newProductList[position].userName)
                 intent.putExtra("lastTalk", newProductList[position].lastTalk)
-
                 intent.putExtra("maxMember", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
                 startActivity(intent)
                 Log.e("TAG", "onItemClick: " + newProductList[position].productID)
             }
-
         })
 
+        return view
+    }
 
-
-
-        binding.bottomNavigation.selectedItemId = R.id.bottom_chat
-        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.bottom_home -> {
-                    val intent = Intent(this, ItemListActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.bottom_chat -> {
-                    val intent = Intent(this, ChatListActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.bottom_mypage -> {
-                    val intent = Intent(this, MyPageActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                else -> false
-            }
-        }
-
+    private fun refreshData() {
+        getChatData()
+        mysrl!!.isRefreshing = false
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -108,6 +88,7 @@ class ChatListActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+                val tempProductList = mutableListOf<MyChat>()
                 if (currentUserUid != null) {
                     val productCollection = firestore.collection("product")
                     val productSnapshot = productCollection.get().await()
@@ -147,22 +128,23 @@ class ChatListActivity : AppCompatActivity() {
                                     lastTalk,
                                     maxMember,
                                     nowMember,
-                                    productID,
-
-                                    )
-                                newProductList.add(product)
+                                    productID
+                                )
+                                tempProductList.add(product)
                                 Log.d("productList", "getProductData: $newProductList")
                             }
                         }
                     }
 
                     // 데이터가 변경되었으므로 어댑터에 알리기
-                    runOnUiThread {
+                    activity?.runOnUiThread {
+                        newProductList.clear()
+                        newProductList.addAll(tempProductList) // 기존 리스트를 새로운 리스트로 교체
                         newRecyclerView.adapter!!.notifyDataSetChanged()
                     }
+                    isDataLoaded = true
                 } else {
                     Log.d("TAG", "getChatData: currentUserUid is null")
-
                 }
             } catch (e: Exception) {
                 // 오류 처리

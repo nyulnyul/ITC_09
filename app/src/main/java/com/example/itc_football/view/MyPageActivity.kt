@@ -1,24 +1,24 @@
 package com.example.itc_football.view
 
-import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import com.example.itc_football.R
-import com.example.itc_football.databinding.MyPageActivityBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.itc_football.databinding.MyPageFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MyPageActivity : AppCompatActivity() {
-    private lateinit var binding: MyPageActivityBinding
+class MyPageFragment : Fragment() {
+    private var _binding: MyPageFragmentBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = MyPageActivityBinding.inflate(layoutInflater)
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = MyPageFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        setContentView(view)
 
         val user = FirebaseAuth.getInstance().currentUser
         user?.let {
@@ -32,51 +32,20 @@ class MyPageActivity : AppCompatActivity() {
                         val dept = document.getString("dept")
                         val email = document.getString("email")
 
-
                         binding.myname.text = name
-
                         binding.mydept.text = dept
                         if (email != null) {
                             binding.mynum.text = email.split("@")[0]
                         }
-
-                    } else {
-                        Log.d(TAG, "No such document")
                     }
                 }
-                .addOnFailureListener { exception ->
-                    Log.d(TAG, "get failed with ", exception)
-                }
-        } ?: run {
-            // No user is signed in
         }
 
+        return view
+    }
 
-
-        binding.bottomNavigation.selectedItemId = R.id.bottom_mypage
-        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.bottom_home -> {
-                    val intent = Intent(this, ItemListActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.bottom_chat -> {
-                    val intent = Intent(this, ChatListActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                R.id.bottom_mypage -> {
-                    val intent = Intent(this, MyPageActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-
-                else -> false
-            }
-        }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -70,6 +70,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
                     android:layout_marginTop="25dp"
                     android:text="상품 가격"
                     android:textSize="18sp"
@@ -77,20 +78,28 @@
 
                 <EditText
                     android:id="@+id/productPrice"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginTop="25dp"
-                    android:layout_marginEnd="8dp"
-
+                    android:layout_marginEnd="4dp"
                     android:drawablePadding="8dp"
                     android:ems="10"
-                    android:hint="10000"
+                    android:hint="0"
                     android:textAlignment="textEnd"
                     android:inputType="text"
                     android:padding="8dp"
                     android:text=""
                     android:textColor="@color/black"
                     android:textColorHighlight="@color/cardview_dark_background" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="원"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
@@ -110,7 +119,7 @@
                 android:background="@drawable/custom_edittext2"
                 android:drawableLeft="@drawable/baseline_mode_24"
                 android:drawablePadding="8dp"
-                android:hint="상품상세"
+                android:hint="상세내용"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />

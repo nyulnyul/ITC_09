@@ -13,20 +13,22 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
-class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
+class ProductAdapter(private val productList: ArrayList<Product>) :
+    RecyclerView.Adapter<ProductAdapter.MyViewHolder>() {
 
-    private lateinit var mListener : OnItemClickListener
+    private lateinit var mListener: OnItemClickListener
 
     interface OnItemClickListener {
-        fun onItemClick(position : Int)
+        fun onItemClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener : OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         mListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
         return MyViewHolder(itemView, mListener)
     }
 
@@ -44,15 +46,14 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         storageRef.downloadUrl.addOnSuccessListener {
             Glide.with(holder.itemView.context).load(it).into(holder.imgProduct)
         }
-        // Glide를 이용하여 ImageView에 url 이미지를 세팅
-//        Glide.with(holder.itemView.context).load(currentItem.imageUrl).into(holder.imageUrl)
     }
 
     override fun getItemCount(): Int {
         return productList.size
     }
 
-    class MyViewHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View, listener: OnItemClickListener) :
+        RecyclerView.ViewHolder(itemView) {
         val imgProduct: ShapeableImageView = itemView.findViewById(R.id.img_product)
         val productName: TextView = itemView.findViewById(R.id.productName)
         val productPrice: TextView = itemView.findViewById(R.id.productPrice)
