@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="사진선택"
                 app:cornerRadius="10dp"
-                android:backgroundTint="@color/purple"
+                android:backgroundTint="#83B4F9"
                 android:layout_margin="10dp" />
 
 
@@ -148,8 +148,8 @@
             <Button
                 android:id="@+id/recruitOkBtn"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/purple"
+                android:layout_height="55dp"
+                android:background="@drawable/custom_button"
                 android:text="방만들기"
                 android:textSize="18sp"
                 android:textStyle="bold"
