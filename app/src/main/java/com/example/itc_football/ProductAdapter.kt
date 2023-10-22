@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.itc_football.view.ItemListActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

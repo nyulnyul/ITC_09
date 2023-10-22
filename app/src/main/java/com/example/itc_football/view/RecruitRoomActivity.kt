@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class RecruitRoomActivity : AppCompatActivity() {
     private lateinit var binding: RecrruitRoomActivityBinding
@@ -92,7 +89,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         addProduct() // 방 생성 메서드 호출
         // 딜레이를 주고 다음 액티비티로 이동
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, ItemListActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }, 3000) // 2000 밀리초 (2초) 딜레이
@@ -109,7 +106,7 @@ class RecruitRoomActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
 
-        var uploadTask = storageRef.putBytes(data)
+        val uploadTask = storageRef.putBytes(data)
         uploadTask.addOnFailureListener {
         }.addOnSuccessListener { taskSnapshot -> }
     }
@@ -148,10 +145,6 @@ class RecruitRoomActivity : AppCompatActivity() {
                     .addOnSuccessListener {
                         // 업데이트 성공 시 처리
                         imageUpload(productID)
-                        // 여기서 다음 액티비티로 이동
-//                        val intent = Intent(this, ItemListActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
                     }
                     .addOnFailureListener { e ->
                         // 업데이트 실패 시 처리
