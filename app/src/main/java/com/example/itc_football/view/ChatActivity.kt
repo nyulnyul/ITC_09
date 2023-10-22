@@ -4,8 +4,11 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.itc_football.R
 import com.example.itc_football.data.Chat
 import com.example.itc_football.viewmodel.ChatAdapter
 import com.example.itc_football.viewmodel.SocketHandler
@@ -117,6 +120,42 @@ class ChatActivity : AppCompatActivity() {
                 binding.rvChat.scrollToPosition(chatList.size - 1)
             }
         }
+
+        val initialMargin = resources.getDimensionPixelSize(R.dimen.initial_margin)
+
+        val constraintLayout = binding.chatLayout // 여기에 자신의 ConstraintLayout ID를 사용하세요
+        val rvChat = binding.rvChat
+        val sendMessageLayout = binding.sendMessageLayout
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+
+        // rvChat의 아래 여백을 initialMargin만큼 설정 (처음에는 이 여백이 적용됨)
+        constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+        constraintSet.applyTo(constraintLayout)
+
+        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy < 0 && !rvChat.canScrollVertically(1)) {
+                    // 스크롤을 올릴 때 (메시지 아래로 스크롤)
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+                    constraintSet.applyTo(constraintLayout)
+                } else if (rvChat.canScrollVertically(1)) {
+                    // 스크롤이 아래로 진행 중
+                    constraintSet.clone(constraintLayout)
+                    // rvChat의 아래 여백을 0으로 설정 (스크롤 중에는 여백을 없애 줍니다)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, 12)
+                    constraintSet.applyTo(constraintLayout)
+                } else {
+                    // 스크롤 위치가 최하단이 아닌 경우
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+                    constraintSet.applyTo(constraintLayout)
+                }
+            }
+        })
+
 
 
     }

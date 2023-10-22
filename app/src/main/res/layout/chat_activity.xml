@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/chatLayout"
     tools:context=".view.ChatActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -74,7 +75,8 @@
     <LinearLayout
         android:id="@+id/sendMessageLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
         android:layout_marginTop="5dp"
@@ -94,12 +96,10 @@
 
         <Button
             android:id="@+id/sendButton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:text="↑"
-            android:textColor="#ffffff"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:background="@drawable/circle_btn"
-            android:drawableTop="@drawable/baseline_arrow_upward_24"
-            android:textSize="16sp" />
+            android:drawableTop="@drawable/baseline_arrow_upward_24" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

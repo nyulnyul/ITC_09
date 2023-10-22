@@ -40,10 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         // 프래그먼트 전환 애니메이션 설정
         transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-
         transaction.replace(R.id.container, fragment)
 //        transaction.addToBackStack(null)
-
         transaction.commit()
     }
 }
