@@ -1,4 +1,4 @@
-package com.example.itc_football
+package com.example.itc_football.data
 
 import com.google.firebase.Timestamp
 

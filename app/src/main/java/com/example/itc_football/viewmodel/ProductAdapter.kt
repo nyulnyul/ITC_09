@@ -1,15 +1,14 @@
-package com.example.itc_football
+package com.example.itc_football.viewmodel
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.itc_football.view.ItemListActivity
+import com.example.itc_football.data.Product
+import com.example.itc_football.R
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -26,13 +25,13 @@ class ProductAdapter(private val productList : ArrayList<Product>): RecyclerView
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
         return MyViewHolder(itemView, mListener)
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ProductAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val currentItem = productList[position]
 

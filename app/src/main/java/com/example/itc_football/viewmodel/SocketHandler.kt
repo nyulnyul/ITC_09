@@ -1,7 +1,8 @@
-package com.example.itc_football
+package com.example.itc_football.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.itc_football.data.Chat
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket

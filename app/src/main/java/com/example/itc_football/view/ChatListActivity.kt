@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.itc_football.Product
-import com.example.itc_football.ProductAdapter
+import com.example.itc_football.data.Product
+import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.R
+import com.example.itc_football.data.MyChat
 import com.example.itc_football.databinding.ChatListActivityBinding
+import com.example.itc_football.viewmodel.MyChatAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +28,7 @@ class ChatListActivity : AppCompatActivity() {
     private val firestore = FirebaseFirestore.getInstance()
     private var mysrl: SwipeRefreshLayout? = null
 
-    private var newProductList = arrayListOf<Product>()
+    private var newProductList = arrayListOf<MyChat>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,17 +52,17 @@ class ChatListActivity : AppCompatActivity() {
         })
 
         // 어댑터를 생성하고 리사이클러뷰에 연결
-        val adapter = ProductAdapter(newProductList)
+        val adapter = MyChatAdapter(newProductList)
         newRecyclerView.adapter = adapter
-        adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : MyChatAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
 
                 val intent = Intent(this@ChatListActivity, PreviewActivity::class.java)
 
                 intent.putExtra("productID", newProductList[position].productID)
                 intent.putExtra("productName", newProductList[position].productName)
-                intent.putExtra("productDetail", newProductList[position].productDetail)
-                intent.putExtra("productPrice", newProductList[position].productPrice)
+                intent.putExtra("userName", newProductList[position].userName)
+                intent.putExtra("lastTalk", newProductList[position].lastTalk)
 
                 intent.putExtra("maxMember", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
@@ -116,18 +119,32 @@ class ChatListActivity : AppCompatActivity() {
 
                         // 만약 현재 사용자의 uid가 'member' 컬렉션에 있다면, 이 상품을 리스트에 추가합니다.
                         if (!memberSnapshot.isEmpty) {
-                            val productName = productDocument.getString("productName")
-                            val productDetail = productDocument.getString("productDetail")
-                            val productPrice = productDocument.getLong("productPrice")
+                            val orignPname = productDocument.getString("productName")
+                            var productName = orignPname?.take(7) ?: "" // 처음 7글자만 가져오기
+                            if (orignPname != null && orignPname.length > 7) { // 만약 길이가 7을 초과한다면
+                                productName += ".." // ".." 추가하기
+                            }
+                            val splitName  = productDocument.getString("maker")?.split("_")
+                            val userName = splitName?.get(1)
+                            var lastTalk: String?
+                            val msgCollection = productDocument.reference.collection("msg")
+                            val lastMsgDocSnapshots = msgCollection.orderBy("timestamp", Query.Direction.DESCENDING)
+                                .limit(1).get().await()
+
+                            if (!lastMsgDocSnapshots.isEmpty) {
+                                lastTalk= lastMsgDocSnapshots.documents[0].getString("text")
+                            } else {
+                                lastTalk= "아직 채팅이 시작되지 않았습니다"
+                            }
                             val maxMember = productDocument.getLong("maxMember")?.toInt() ?: 0
                             val nowMember = productDocument.getLong("nowMember")?.toInt() ?: 0
                             val productID = productDocument.getString("productID")
 
-                            if (productName != null && productDetail != null && productPrice != null && productID != null) {
-                                val product = Product(
+                            if (productName != null && userName != null && lastTalk != null && productID != null) {
+                                val product = MyChat(
                                     productName,
-                                    productDetail,
-                                    productPrice.toInt(),
+                                    userName,
+                                    lastTalk,
                                     maxMember,
                                     nowMember,
                                     productID,
