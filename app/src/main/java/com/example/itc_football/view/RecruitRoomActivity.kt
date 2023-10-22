@@ -76,11 +76,6 @@ class RecruitRoomActivity : AppCompatActivity() {
         // 방 생성 버튼 클릭시 이벤트
         binding.recruitOkBtn.setOnClickListener {
             addProductWithDelay()
-//            addProduct()
-////            imageUpload(productID)
-//            val intent = Intent(this, ItemListActivity::class.java)
-//            startActivity(intent)
-//            finish()
         }
     }
 
@@ -133,7 +128,6 @@ class RecruitRoomActivity : AppCompatActivity() {
             "maxMember" to maxMember,
             "nowMember" to nowMember,
             "maker" to maker,
-            // "imageUrl" to imageUrl
         )
 
         productCollection.add(productData)
