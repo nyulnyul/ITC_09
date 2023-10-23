@@ -8,11 +8,27 @@
     android:gravity="center"
     tools:context=".view.SplashActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/appname"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/logo"
         android:layout_gravity="center"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/apppreview"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
 </LinearLayout>
