@@ -18,11 +18,16 @@
         android:theme="@style/Theme.ITC_Football"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu" >
+
         <activity
             android:name=".view.SplashActivity"
-            android:exported="false"
-            android:label="@string/title_activity_splash"
-            android:theme="@style/Theme.ITC_Football" />
+            android:exported="true"
+            android:theme="@style/Theme.ITC_Football" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".viewmodel.ProductAdapter"
             android:exported="true" />
