@@ -62,11 +62,14 @@ class ChatListFragment : Fragment() {
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : MyChatAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val intent = Intent(requireContext(), PreviewActivity::class.java)
+                val intent = Intent(requireContext(), ChatActivity::class.java)
+                val user = FirebaseAuth.getInstance().currentUser
+                val email = user?.email ?: ""
+
+                intent.putExtra(ChatActivity.USERNAME, email)
                 intent.putExtra("productID", newProductList[position].productID)
                 intent.putExtra("productName", newProductList[position].productName)
-                intent.putExtra("userName", newProductList[position].userName)
-                intent.putExtra("lastTalk", newProductList[position].lastTalk)
+                intent.putExtra("productPrice", newProductList[position].productPrice)
                 intent.putExtra("maxMember", newProductList[position].maxMember)
                 intent.putExtra("nowMember", newProductList[position].nowMember)
                 startActivity(intent)
@@ -120,6 +123,7 @@ class ChatListFragment : Fragment() {
                             val maxMember = productDocument.getLong("maxMember")?.toInt() ?: 0
                             val nowMember = productDocument.getLong("nowMember")?.toInt() ?: 0
                             val productID = productDocument.getString("productID")
+                            val productPrice = productDocument.getLong("productPrice")?.toInt() ?: 0
 
                             if (productName != null && userName != null && lastTalk != null && productID != null) {
                                 val product = MyChat(
@@ -128,7 +132,8 @@ class ChatListFragment : Fragment() {
                                     lastTalk,
                                     maxMember,
                                     nowMember,
-                                    productID
+                                    productID,
+                                    productPrice
                                 )
                                 tempProductList.add(product)
                                 Log.d("productList", "getProductData: $newProductList")
