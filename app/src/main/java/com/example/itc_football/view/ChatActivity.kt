@@ -3,6 +3,8 @@ package com.example.itc_football.view
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +28,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var socketHandler: SocketHandler
     private lateinit var binding: ChatActivityBinding
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var progressBar: ProgressBar
 
     private val chatList = mutableListOf<Chat>()
 
@@ -71,6 +74,9 @@ class ChatActivity : AppCompatActivity() {
 
         binding.productName.text = intent.getStringExtra("productName")
         binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
+
+        progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE
         loadChatMessages()
 
         if (userName.isEmpty()) {
@@ -185,9 +191,13 @@ class ChatActivity : AppCompatActivity() {
                     }
                     chatAdapter.submitChat(chatList)
                     binding.rvChat.scrollToPosition(chatList.size - 1)
+
+                    progressBar.visibility = View.GONE
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents.", exception)
+
+                    progressBar.visibility = View.GONE
                 }
         }
     }

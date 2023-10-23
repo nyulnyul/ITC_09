@@ -51,6 +51,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chat"
         android:layout_width="match_parent"
@@ -94,12 +105,19 @@
             android:paddingStart="15dp"
             android:textSize="18sp" />
 
-        <Button
+
+        <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
-            android:background="@drawable/circle_btn"
-            android:drawableTop="@drawable/baseline_arrow_upward_24" />
+            android:backgroundTint="@color/white"
+            android:background="@drawable/button_no_ripple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etMsg"
+            android:scaleType="center"
+            android:src="@drawable/send_btn_img" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
