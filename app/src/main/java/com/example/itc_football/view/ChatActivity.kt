@@ -70,7 +70,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         binding.productName.text = intent.getStringExtra("productName")
-        binding.productPrice.text = intent.getStringExtra("productPrice")
+        binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
         loadChatMessages()
 
         if (userName.isEmpty()) {

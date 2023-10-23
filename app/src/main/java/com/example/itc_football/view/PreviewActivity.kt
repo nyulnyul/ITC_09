@@ -59,9 +59,10 @@ class PreviewActivity : AppCompatActivity() {
                 }
             }
 
+            var pP =intent.getIntExtra("productPrice", 0)
             binding.productName.text = intent.getStringExtra("productName")
             binding.productDetail.text = intent.getStringExtra("productDetail")
-            binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
+            binding.productPrice.text = "${pP}원"
             binding.nowMember.text = intent.getIntExtra("nowMember", 0).toString()
             binding.maxMember.text = intent.getIntExtra("maxMember", 0).toString()
             Log.d("productPrice1", "${intent.getIntExtra("productPrice", 0)}")
@@ -76,7 +77,7 @@ class PreviewActivity : AppCompatActivity() {
                 intent.putExtra("productID", productID)
                 intent.putExtra("productName", binding.productName.text.toString())
                 intent.putExtra("productDetail", binding.productDetail.text.toString())
-                intent.putExtra("productPrice", binding.productPrice.text.toString())
+                intent.putExtra("productPrice", pP)
                 Log.d("productPrice2", binding.productPrice.text.toString())
                 intent.putExtra("peopleNum", binding.maxMember.text.toString())
                 intent.putExtra("nowMember", binding.nowMember.text.toString())
