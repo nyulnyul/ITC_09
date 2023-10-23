@@ -8,20 +8,18 @@
     android:gravity="center"
     tools:context=".view.SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/appname"
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:textSize="30sp"
-        android:textStyle="bold"/>
+        android:src="@drawable/title"
+        android:contentDescription="@string/app_name"/>
 
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/logo"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
     <TextView
         android:layout_width="wrap_content"
