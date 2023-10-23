@@ -34,7 +34,7 @@ class MyPageFragment : Fragment() {
         handler.postDelayed({
             stopShimmerEffect()
             showDataView()
-        }, 3000)
+        }, 1000)
 
         startShimmerEffect()
 

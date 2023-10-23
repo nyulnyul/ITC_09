@@ -13,15 +13,17 @@
     tools:context=".view.ItemActivity"
     >
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="120dp">
+
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/img_product"
-            android:src="@drawable/baseline_mode_24"
+            android:background="@color/light_gray"
             android:scaleType="centerCrop"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="10dp"

@@ -1,5 +1,6 @@
 package com.example.itc_football.view
 
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.itc_football.data.Product
 import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.databinding.ItemListFragmentBinding
+import com.example.itc_football.viewmodel.ShimmerAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,7 @@ class ItemListFragment : Fragment() {
     private var hasLoadedData = false
 
     private var newProductList = arrayListOf<Product>()
+    private lateinit var shimmerAdapter: ShimmerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +40,7 @@ class ItemListFragment : Fragment() {
         val view = binding.root
 
         newRecyclerView = binding.recyclerView
+
         newRecyclerView.layoutManager = LinearLayoutManager(context)
         newRecyclerView.setHasFixedSize(true)
 
@@ -53,27 +57,52 @@ class ItemListFragment : Fragment() {
 
         if (!hasLoadedData) {
             // 데이터를 가져오는 함수 호출
+            shimmerAdapter = ShimmerAdapter(10)  // Use an arbitrary number for the item count.
+            newRecyclerView.adapter = shimmerAdapter
             getProductData()
+        }else {
+            setUpRealData(newProductList)
         }
 
-        // 어댑터를 생성하고 리사이클러뷰에 연결
-        val adapter = ProductAdapter(newProductList)
+//        // 어댑터를 생성하고 리사이클러뷰에 연결
+//        val adapter = ProductAdapter(newProductList)
+//        newRecyclerView.adapter = adapter
+//        adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
+//            override fun onItemClick(position: Int) {
+//                val intent = Intent(context, PreviewActivity::class.java)
+//
+//                intent.putExtra("productID", newProductList[position].productID)
+//                intent.putExtra("productName", newProductList[position].productName)
+//                intent.putExtra("productDetail", newProductList[position].productDetail)
+//                intent.putExtra("productPrice", newProductList[position].productPrice)
+//
+//                intent.putExtra("maxMember", newProductList[position].maxMember)
+//                intent.putExtra("nowMember", newProductList[position].nowMember)
+//                startActivity(intent)
+//            }
+//        })
+            return view
+    }
+    private fun setUpRealData(productList : ArrayList<Product>){
+
+        val adapter = ProductAdapter(productList)
+
         newRecyclerView.adapter = adapter
+
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val intent = Intent(context, PreviewActivity::class.java)
+            override fun onItemClick(position:Int){
+                val intent=Intent(context,PreviewActivity::class.java)
 
-                intent.putExtra("productID", newProductList[position].productID)
-                intent.putExtra("productName", newProductList[position].productName)
-                intent.putExtra("productDetail", newProductList[position].productDetail)
-                intent.putExtra("productPrice", newProductList[position].productPrice)
+                intent.putExtra("productID",newProductList[position].productID)
+                intent.putExtra("productName",newProductList[position].productName)
+                intent.putExtra("productDetail",newProductList[position].productDetail)
+                intent.putExtra("productPrice",newProductList[position].productPrice)
 
-                intent.putExtra("maxMember", newProductList[position].maxMember)
-                intent.putExtra("nowMember", newProductList[position].nowMember)
+                intent.putExtra("maxMember",newProductList[position].maxMember)
+                intent.putExtra("nowMember",newProductList[position].nowMember)
                 startActivity(intent)
             }
         })
-            return view
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -84,6 +113,8 @@ class ItemListFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getProductData() {
+
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val querySnapshot = firestore.collection("product").get().await()
@@ -115,10 +146,11 @@ class ItemListFragment : Fragment() {
                     newProductList.clear()
                     newProductList.addAll(tempProductList)
                     newRecyclerView.adapter?.notifyDataSetChanged()
+                    setUpRealData(newProductList)
                 }
                 hasLoadedData = true
             } catch (e: Exception) {
-                // 오류 처리
+
                 e.printStackTrace()
             }
         }
