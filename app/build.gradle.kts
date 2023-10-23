@@ -38,7 +38,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
@@ -50,7 +50,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
 
     // 새로고침
-    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -59,7 +59,12 @@ dependencies {
     implementation("com.google.android.material:material:1.2.0-alpha01")
 
     // socket io
-    implementation("io.socket:socket.io-client:2.0.0"){ exclude(group = "org.json", module = "json")}
+    implementation("io.socket:socket.io-client:2.0.0") {
+        exclude(
+            group = "org.json",
+            module = "json"
+        )
+    }
 
     //gson
     implementation("com.google.code.gson:gson:2.8.9")
@@ -81,6 +86,9 @@ dependencies {
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0@aar")
 
 
 }
