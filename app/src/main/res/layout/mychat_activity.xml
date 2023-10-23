@@ -12,67 +12,50 @@
     app:cardElevation="2dp"
     tools:context=".view.MyChatActivity">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="80dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_product"
-            android:layout_width="53dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/baseline_mode_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/roundImage" />
 
         <TextView
             android:id="@+id/productName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@+id/img_product"
+            android:layout_marginStart="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="상품"
             android:textSize="20sp"
-            android:maxLines= "1"
-            android:ellipsize="end"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="132dp"
-            android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/productName"
-            android:gravity="center_vertical"
-            android:text="로드리"
-            android:textColor="@color/gray"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/lastTalk"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-
-            android:layout_toEndOf="@+id/img_product"
-            android:text="아직 채팅이 없습니다."
-            android:textSize="15sp" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/userName"
+            app:layout_constraintStart_toEndOf="@+id/img_product"
+            app:layout_constraintTop_toTopOf="@+id/img_product" />
 
         <LinearLayout
+            android:id="@+id/member"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/productName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userName"
+            app:layout_constraintTop_toTopOf="@+id/productName">
 
             <TextView
                 android:id="@+id/nowMember"
@@ -83,6 +66,7 @@
                 android:textSize="17sp" />
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" / "
@@ -97,10 +81,39 @@
                 android:textAlignment="center"
                 android:textSize="17sp" />
 
-
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="17dp"
+            android:gravity="center_vertical"
+            android:text="로드리"
+            android:textColor="@color/gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@+id/member"
+            app:layout_constraintStart_toEndOf="@+id/productName"
+            app:layout_constraintTop_toTopOf="@+id/productName"
+            />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/lastTalk"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|left"
+            android:text="아직 채팅이 없습니다."
+            android:textColor="@color/gray"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_product"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_product"
+            app:layout_constraintTop_toBottomOf="@+id/productName" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
