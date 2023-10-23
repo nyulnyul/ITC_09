@@ -12,4 +12,5 @@
     <string name="dept">학과</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="floating_detail">방생성 플로팅버튼</string>
 </resources>

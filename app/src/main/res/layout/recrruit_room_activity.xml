@@ -157,8 +157,8 @@
             <Button
                 android:id="@+id/recruitOkBtn"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@drawable/custom_button"
+                android:layout_height="60dp"
+                android:backgroundTint="#83B4F9"
                 android:text="방만들기"
                 android:textSize="18sp"
                 android:textStyle="bold"

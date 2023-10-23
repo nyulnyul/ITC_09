@@ -29,15 +29,15 @@
             android:id="@+id/recruitBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/bottomNavigation"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:backgroundTint="#83B4F9"
-            android:contentDescription="방생성 플로팅버튼"
+            android:contentDescription="@string/floating_detail"
             android:src="@drawable/baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:shapeAppearance="@style/FAB_Shape"
             app:tint="#ffffff" />
 
 

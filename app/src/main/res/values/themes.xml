@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ITC_Football" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-       <item name="colorPrimary">#83B4F9</item>
+       <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="android:windowLightStatusBar">@color/black</item> <!-- 상태바 글자색 -->

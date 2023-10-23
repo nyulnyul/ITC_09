@@ -3,4 +3,10 @@
     <style name="SpinnerTextStyle">
         <item name="android:textSize">18sp</item> <!-- 원하는 글꼴 크기로 변경 -->
     </style>
+
+    <!-- 원형 플로팅버튼 -->
+    <style name="FAB_Shape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
