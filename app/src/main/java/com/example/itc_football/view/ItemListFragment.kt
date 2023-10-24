@@ -1,23 +1,23 @@
 package com.example.itc_football.view
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.itc_football.data.Product
-import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.databinding.ItemListFragmentBinding
+import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.viewmodel.ShimmerAdapter
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -35,12 +35,11 @@ class ItemListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ItemListFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
 
         newRecyclerView = binding.recyclerView
-
         newRecyclerView.layoutManager = LinearLayoutManager(context)
         newRecyclerView.setHasFixedSize(true)
 
@@ -56,50 +55,32 @@ class ItemListFragment : Fragment() {
         }
 
         if (!hasLoadedData) {
-            // 데이터를 가져오는 함수 호출
             shimmerAdapter = ShimmerAdapter(10)  // Use an arbitrary number for the item count.
             newRecyclerView.adapter = shimmerAdapter
             getProductData()
-        }else {
+        } else {
             setUpRealData(newProductList)
         }
 
-//        // 어댑터를 생성하고 리사이클러뷰에 연결
-//        val adapter = ProductAdapter(newProductList)
-//        newRecyclerView.adapter = adapter
-//        adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-//            override fun onItemClick(position: Int) {
-//                val intent = Intent(context, PreviewActivity::class.java)
-//
-//                intent.putExtra("productID", newProductList[position].productID)
-//                intent.putExtra("productName", newProductList[position].productName)
-//                intent.putExtra("productDetail", newProductList[position].productDetail)
-//                intent.putExtra("productPrice", newProductList[position].productPrice)
-//
-//                intent.putExtra("maxMember", newProductList[position].maxMember)
-//                intent.putExtra("nowMember", newProductList[position].nowMember)
-//                startActivity(intent)
-//            }
-//        })
-            return view
+        return view
     }
-    private fun setUpRealData(productList : ArrayList<Product>){
 
+    private fun setUpRealData(productList: ArrayList<Product>) {
         val adapter = ProductAdapter(productList)
 
         newRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-            override fun onItemClick(position:Int){
-                val intent=Intent(context,PreviewActivity::class.java)
+            override fun onItemClick(position: Int) {
+                val intent = Intent(context, PreviewActivity::class.java)
+                val product = productList[position]
 
-                intent.putExtra("productID",newProductList[position].productID)
-                intent.putExtra("productName",newProductList[position].productName)
-                intent.putExtra("productDetail",newProductList[position].productDetail)
-                intent.putExtra("productPrice",newProductList[position].productPrice)
-
-                intent.putExtra("maxMember",newProductList[position].maxMember)
-                intent.putExtra("nowMember",newProductList[position].nowMember)
+                intent.putExtra("productID", product.productID)
+                intent.putExtra("productName", product.productName)
+                intent.putExtra("productDetail", product.productDetail)
+                intent.putExtra("productPrice", product.productPrice)
+                intent.putExtra("maxMember", product.maxMember)
+                intent.putExtra("nowMember", product.nowMember)
                 startActivity(intent)
             }
         })
@@ -112,10 +93,9 @@ class ItemListFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getProductData() {
-
-
-        CoroutineScope(Dispatchers.IO).launch {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val querySnapshot = firestore.collection("product").get().await()
                 val tempProductList = mutableListOf<Product>()
@@ -141,7 +121,6 @@ class ItemListFragment : Fragment() {
                     }
                 }
 
-
                 activity?.runOnUiThread {
                     newProductList.clear()
                     newProductList.addAll(tempProductList)
@@ -150,7 +129,6 @@ class ItemListFragment : Fragment() {
                 }
                 hasLoadedData = true
             } catch (e: Exception) {
-
                 e.printStackTrace()
             }
         }
