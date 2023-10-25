@@ -15,6 +15,7 @@ import com.example.itc_football.data.Product
 import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.databinding.ItemListFragmentBinding
 import com.example.itc_football.viewmodel.ShimmerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,7 @@ class ItemListFragment : Fragment() {
 
     private var newProductList = arrayListOf<Product>()
     private lateinit var shimmerAdapter: ShimmerAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,16 +93,40 @@ class ItemListFragment : Fragment() {
 
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
             override fun onItemClick(position:Int){
-                val intent=Intent(context,PreviewActivity::class.java)
+                val productID = newProductList[position].productID
+                val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
-                intent.putExtra("productID",newProductList[position].productID)
-                intent.putExtra("productName",newProductList[position].productName)
-                intent.putExtra("productDetail",newProductList[position].productDetail)
-                intent.putExtra("productPrice",newProductList[position].productPrice)
+                // Firestore 인스턴스 생성
+                val firestore = FirebaseFirestore.getInstance()
 
-                intent.putExtra("maxMember",newProductList[position].maxMember)
-                intent.putExtra("nowMember",newProductList[position].nowMember)
-                startActivity(intent)
+                // 파이어스토어에서 member 컬렉션 조회
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val productDocument = firestore.collection("product").document(productID)
+                        val memberSnapshot =
+                            productDocument.collection("member").whereEqualTo("uid", currentUserUid).get().await()
+
+                        // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
+                        activity?.runOnUiThread {
+
+                                val previewIntent = Intent(context, PreviewActivity::class.java)
+                                previewIntent.putExtra("productID", newProductList[position].productID)
+                                previewIntent.putExtra("productName", newProductList[position].productName)
+                                previewIntent.putExtra("productDetail", newProductList[position].productDetail)
+                                previewIntent.putExtra("productPrice", newProductList[position].productPrice)
+
+                                previewIntent.putExtra("maxMember", newProductList[position].maxMember)
+                                previewIntent.putExtra("nowMember", newProductList[position].nowMember)
+
+                                startActivity(previewIntent)
+
+
+                        }
+                    } catch (e: Exception) {
+
+                        e.printStackTrace()
+                    }
+                }
             }
         })
     }
@@ -127,6 +153,7 @@ class ItemListFragment : Fragment() {
                     val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                     val nowMember = document.getLong("nowMember")?.toInt() ?: 0
                     val productID = document.getString("productID")
+                    val roomAble = document.getString("roomAble")
 
                     if (productName != null && productDetail != null && productPrice != null && productID != null) {
                         val product = Product(
@@ -135,7 +162,9 @@ class ItemListFragment : Fragment() {
                             productPrice.toInt(),
                             maxMember,
                             nowMember,
-                            productID
+                            productID,
+                            roomAble.toString()
+
                         )
                         tempProductList.add(product)
                     }

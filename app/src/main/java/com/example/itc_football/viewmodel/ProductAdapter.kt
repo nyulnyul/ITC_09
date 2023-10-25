@@ -41,6 +41,8 @@ class ProductAdapter(private val productList: ArrayList<Product>) :
         holder.productPrice.text = "${currentItem.productPrice}원"
         holder.maxMember.text = currentItem.maxMember.toString()
         holder.nowMember.text = currentItem.nowMember.toString()
+        holder.roomAble.text = currentItem.roomAble
+
 
         val storageRef = Firebase.storage.reference.child("${currentItem.productID}.png")
         storageRef.downloadUrl.addOnSuccessListener {
@@ -59,6 +61,8 @@ class ProductAdapter(private val productList: ArrayList<Product>) :
         val productPrice: TextView = itemView.findViewById(R.id.productPrice)
         val maxMember: TextView = itemView.findViewById(R.id.maxMember)
         val nowMember: TextView = itemView.findViewById(R.id.nowMember)
+        val roomAble : TextView = itemView.findViewById(R.id.roomAble)
+
 
         init {
             itemView.setOnClickListener {

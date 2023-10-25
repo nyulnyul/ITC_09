@@ -8,12 +8,20 @@
     tools:context=".view.MyPageFragment">
 
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/shimmer_view_mypage"
+           android:orientation="vertical">
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="180dp"
         android:background="@drawable/custom_edittext2"
@@ -81,4 +89,5 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

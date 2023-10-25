@@ -12,6 +12,7 @@ import android.os.Handler
 
 class MyPageFragment : Fragment() {
     private var _binding: MyPageFragmentBinding? = null
+
     private val binding get() = _binding!!
     private lateinit var handler: Handler
 
@@ -28,15 +29,15 @@ class MyPageFragment : Fragment() {
 
         binding.dataview.visibility = View.GONE
 
-        // 쉬머 효과 시작하기 전에 3초 지연 실행을 위한 핸들러 생성
-        handler = Handler()
-
-        handler.postDelayed({
-            stopShimmerEffect()
-            showDataView()
-        }, 1000)
-
-        startShimmerEffect()
+//        // 쉬머 효과 시작하기 전에 3초 지연 실행을 위한 핸들러 생성
+//        handler = Handler()
+//
+//        handler.postDelayed({
+//            stopShimmerEffect()
+//            showDataView()
+//        }, 1000)
+//
+//        startShimmerEffect()
 
 
 
@@ -58,17 +59,21 @@ class MyPageFragment : Fragment() {
                         if (email != null) {
                             binding.mynum.text = email.split("@")[0]
                         }
+                        // 쉬머 효과 중지 및 데이터 뷰 표시
+                        stopShimmerEffect()
+                        showDataView()
                     }
                 }
         }
 
+        startShimmerEffect()
         return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        handler.removeCallbacksAndMessages(null)
+//        handler.removeCallbacksAndMessages(null)
         _binding = null
     }
     private fun startShimmerEffect() {

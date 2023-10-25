@@ -5,11 +5,15 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.itc_football.R
 import com.example.itc_football.databinding.PreviewActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.core.View
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
@@ -29,6 +33,14 @@ class PreviewActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.roomAble,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.whatable.adapter = adapter
+        }
         val productID = intent.getStringExtra("productID")
         val storage = Firebase.storage.reference.child("${productID}.png")
         storage.downloadUrl.addOnSuccessListener {
@@ -41,8 +53,32 @@ class PreviewActivity : AppCompatActivity() {
             Log.d("document", document.toString())
             if (document != null) {
                 val maker = document.data?.get("maker").toString() // 방의 maker값을 가져옴
+                binding.whatable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        p1: android.view.View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val selectedStatus = parent?.getItemAtPosition(position).toString()
+
+                        // 선택된 상태를 파이어베이스에 업데이트
+                        productCollection.update("roomAble", selectedStatus)
+                            .addOnSuccessListener {
+                                Log.d(ContentValues.TAG, "DocumentSnapshot successfully updated!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(ContentValues.TAG, "Error updating document", e)
+                            }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // 아무 것도 선택되지 않았을 때의 처리
+                    }
+                }
                 val makerParts = maker.split("_") // maker값을 _로 나눔
                 binding.nickName.text = makerParts[1] // _로 나눈 maker의 두번째 값이 닉네임을 입력
+//                binding.whatable.text = roomable.toString() // roomable값을 가져옴
 
                 // 학과 설정 부분
                 val userCollection =
