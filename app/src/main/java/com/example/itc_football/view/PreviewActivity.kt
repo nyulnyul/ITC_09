@@ -53,6 +53,15 @@ class PreviewActivity : AppCompatActivity() {
             Log.d("document", document.toString())
             if (document != null) {
                 val maker = document.data?.get("maker").toString() // 방의 maker값을 가져옴
+                // 파이어베이스에서 "roomAble" 필드를 가져옴
+                val roomAble = document.data?.get("roomAble").toString()
+
+                // 스피너의 아이템 목록에서 가져온 "roomAble" 값을 찾아서 선택
+                val roomAbleIndex = resources.getStringArray(R.array.roomAble).indexOf(roomAble)
+                if (roomAbleIndex != -1) {
+                    // 찾은 "roomAble" 값이 아이템 목록에 있을 경우, 그 값을 초기 선택값으로 설정
+                    binding.whatable.setSelection(roomAbleIndex)
+                }
                 binding.whatable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>?,
