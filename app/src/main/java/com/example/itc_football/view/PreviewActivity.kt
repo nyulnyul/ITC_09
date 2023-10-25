@@ -13,9 +13,10 @@ import com.example.itc_football.R
 import com.example.itc_football.databinding.PreviewActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.core.View
+import android.view.View
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+
 
 class PreviewActivity : AppCompatActivity() {
     private lateinit var binding: PreviewActivityBinding
@@ -23,6 +24,7 @@ class PreviewActivity : AppCompatActivity() {
     //    private lateinit var imageUrl: ImageView
     private lateinit var imageUrl: String
     private val firestore = FirebaseFirestore.getInstance()
+    val user = FirebaseAuth.getInstance().currentUser
 
 
     @SuppressLint("SetTextI18n")
@@ -54,6 +56,7 @@ class PreviewActivity : AppCompatActivity() {
             if (document != null) {
                 val maker = document.data?.get("maker").toString() // 방의 maker값을 가져옴
                 // 파이어베이스에서 "roomAble" 필드를 가져옴
+
                 val roomAble = document.data?.get("roomAble").toString()
 
                 // 스피너의 아이템 목록에서 가져온 "roomAble" 값을 찾아서 선택
@@ -85,6 +88,20 @@ class PreviewActivity : AppCompatActivity() {
                         // 아무 것도 선택되지 않았을 때의 처리
                     }
                 }
+                val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
+// "maker" 값에서 UID 부분만 추출
+                val makerUid = maker.split("_")[0]
+
+// "maker"의 UID와 현재 유저의 UID 비교
+                if (currentUserId == makerUid) {
+                    // 동일 인물일 경우, 스피너 보이기
+                    binding.whatable.visibility = View.VISIBLE
+                } else {
+                    // 동일 인물이 아닐 경우, 스피너 숨기기
+                    binding.whatable.visibility = View.GONE
+                }
+
                 val makerParts = maker.split("_") // maker값을 _로 나눔
                 binding.nickName.text = makerParts[1] // _로 나눈 maker의 두번째 값이 닉네임을 입력
 //                binding.whatable.text = roomable.toString() // roomable값을 가져옴
@@ -115,7 +132,7 @@ class PreviewActivity : AppCompatActivity() {
             binding.getChatBtn.setOnClickListener {
 
                 val intent = Intent(this, ChatActivity::class.java)
-                val user = FirebaseAuth.getInstance().currentUser
+
                 val email = user?.email ?: ""
 
                 intent.putExtra(ChatActivity.USERNAME, email)
