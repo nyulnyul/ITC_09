@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.itc_football.data.MypageList
 import com.example.itc_football.viewmodel.MyChatAdapter
 import com.example.itc_football.viewmodel.MyPageListAdapter
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -79,20 +80,47 @@ class MyPageFragment : Fragment() {
         val adapter = MyPageListAdapter(newMypageList)
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : MyPageListAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val intent = Intent(requireContext(), ChatActivity::class.java)
-                val user = FirebaseAuth.getInstance().currentUser
-                val email = user?.email ?: ""
+                        override fun onItemClick(position:Int){
 
-                intent.putExtra(ChatActivity.USERNAME, email)
-                intent.putExtra("productID", newMypageList[position].productID)
-                intent.putExtra("productName", newMypageList[position].productName)
-                intent.putExtra("productPrice", newMypageList[position].productPrice)
-                intent.putExtra("maxMember", newMypageList[position].maxMember)
-                intent.putExtra("nowMember", newMypageList[position].nowMember)
-                startActivity(intent)
-                Log.e("TAG", "onItemClick: " + newMypageList[position].productID)
+                // 파이어스토어에서 member 컬렉션 조회
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        activity?.runOnUiThread {
+
+                                val previewIntent = Intent(context, PreviewActivity::class.java)
+                                previewIntent.putExtra("productID", newMypageList[position].productID)
+                                previewIntent.putExtra("productName", newMypageList[position].productName)
+                                previewIntent.putExtra("productDetail", newMypageList[position].productDetail)
+                                previewIntent.putExtra("productPrice", newMypageList[position].productPrice)
+
+                                previewIntent.putExtra("maxMember", newMypageList[position].maxMember)
+                                previewIntent.putExtra("nowMember", newMypageList[position].nowMember)
+
+                                startActivity(previewIntent)
+
+
+                        }
+                    } catch (e: Exception) {
+
+                        e.printStackTrace()
+                    }
+                }
+
             }
+//            override fun onItemClick(position: Int) {
+//                val intent = Intent(requireContext(), ChatActivity::class.java)
+//                val user = FirebaseAuth.getInstance().currentUser
+//                val email = user?.email ?: ""
+//
+//                intent.putExtra(ChatActivity.USERNAME, email)
+//                intent.putExtra("productID", newMypageList[position].productID)
+//                intent.putExtra("productName", newMypageList[position].productName)
+//                intent.putExtra("productPrice", newMypageList[position].productPrice)
+//                intent.putExtra("maxMember", newMypageList[position].maxMember)
+//                intent.putExtra("nowMember", newMypageList[position].nowMember)
+//                startActivity(intent)
+//                Log.e("TAG", "onItemClick: " + newMypageList[position].productID)
+//            }
         })
         return view
     }
@@ -143,15 +171,18 @@ class MyPageFragment : Fragment() {
                             val productID = productDocument.getString("productID")
                             val productPrice = productDocument.getLong("productPrice")?.toInt() ?: 0
                             val roomAble = productDocument.getString("roomAble")
+                            val productDetail = productDocument.getString("productDetail")
 
-                            if (productName != null && roomAble != null && productID != null) {
+                            if (productName != null && productDetail!= null &&roomAble != null && productID != null) {
                                 val product = MypageList(
                                     productName,
                                     maxMember,
                                     nowMember,
                                     productID,
                                     productPrice,
-                                    roomAble
+                                    roomAble,
+                                    productDetail
+
                                 )
                                 tempProductList.add(product)
                                 Log.d("productList", "getProductData: $newMypageList")
