@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.itc_football.data.MypageList
-import com.example.itc_football.viewmodel.MyChatAdapter
 import com.example.itc_football.viewmodel.MyPageListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -33,6 +32,7 @@ class MyPageFragment : Fragment() {
     private var isDataLoaded = false
     private val binding get() = _binding!!
     private lateinit var handler: Handler
+    private var mysrl: SwipeRefreshLayout? = null
 
 
     override fun onCreateView(
@@ -44,9 +44,14 @@ class MyPageFragment : Fragment() {
         newRecyclerView = binding.recyclerView
         newRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         newRecyclerView.setHasFixedSize(true)
+
+        mysrl = binding.swipeLayout
+        mysrl!!.setOnRefreshListener {
+            refreshData()
+        }
         if (!isDataLoaded) {
             // 데이터를 가져오기
-            getChatData()
+            getProductData()
         }
 
         binding.dataview.visibility = View.GONE
@@ -144,9 +149,14 @@ class MyPageFragment : Fragment() {
     private fun showDataView() {
         binding.dataview.visibility = View.VISIBLE
     }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun refreshData() {
+        getProductData()
+        mysrl!!.isRefreshing = false
+    }
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged")
-    private fun getChatData() {
+    private fun getProductData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid

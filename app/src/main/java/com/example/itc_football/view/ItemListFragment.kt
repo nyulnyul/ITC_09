@@ -75,43 +75,7 @@ class ItemListFragment : Fragment() {
         newRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-            //            override fun onItemClick(position:Int){
-//                val productID = newProductList[position].productID
-//                val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-//
-//                // Firestore 인스턴스 생성
-//                val firestore = FirebaseFirestore.getInstance()
-//
-//                // 파이어스토어에서 member 컬렉션 조회
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    try {
-//                        val productDocument = firestore.collection("product").document(productID)
-//                        val memberSnapshot =
-//                            productDocument.collection("member").whereEqualTo("uid", currentUserUid).get().await()
-//
-//                        // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
-//                        activity?.runOnUiThread {
-//
-//                                val previewIntent = Intent(context, PreviewActivity::class.java)
-//                                previewIntent.putExtra("productID", newProductList[position].productID)
-//                                previewIntent.putExtra("productName", newProductList[position].productName)
-//                                previewIntent.putExtra("productDetail", newProductList[position].productDetail)
-//                                previewIntent.putExtra("productPrice", newProductList[position].productPrice)
-//
-//                                previewIntent.putExtra("maxMember", newProductList[position].maxMember)
-//                                previewIntent.putExtra("nowMember", newProductList[position].nowMember)
-//
-//                                startActivity(previewIntent)
-//
-//
-//                        }
-//                    } catch (e: Exception) {
-//
-//                        e.printStackTrace()
-//                    }
-//                }
-//
-//            }
+
             //product 컬렉션 안 member 컬렉션 안에 현재 사용자의 uid가 있는지 확인 후 같으면 실행
             override fun onItemClick(position: Int) {
                 val productID = newProductList[position].productID
@@ -202,7 +166,7 @@ class ItemListFragment : Fragment() {
                     val productID = document.getString("productID")
                     val roomAble = document.getString("roomAble")
 
-                    if (productName != null && productDetail != null && productPrice != null && productID != null) {
+                    if (productName != null && productDetail != null && productPrice != null && productID != null &&roomAble != "공구완료") {
                         val product = Product(
                             productName,
                             productDetail,
