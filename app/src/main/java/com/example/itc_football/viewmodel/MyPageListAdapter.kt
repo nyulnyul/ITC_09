@@ -38,6 +38,11 @@ class MyPageListAdapter(private val MyPageList: ArrayList<MypageList>) :
         holder.productName.text = currentItem.productName
         holder.productPrice.text = currentItem.productPrice.toString()
         holder.roomAble.text = currentItem.roomAble
+        when (currentItem.roomAble) {
+            "공구중" -> holder.roomAble.setTextColor(holder.itemView.context.getColor(R.color.green))
+            "공구완료" -> holder.roomAble.setTextColor(holder.itemView.context.getColor(R.color.red))
+            else -> holder.roomAble.setTextColor(holder.itemView.context.getColor(R.color.gray))
+        }
         holder.maxMember.text = currentItem.maxMember.toString()
         holder.nowMember.text = currentItem.nowMember.toString()
 

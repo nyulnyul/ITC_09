@@ -128,12 +128,10 @@ class MyPageFragment : Fragment() {
                     val productSnapshot = productCollection.get().await()
 
                     for (productDocument in productSnapshot.documents) {
-                        val memberCollection = productDocument.reference.collection("member")
-                        val memberSnapshot =
-                            memberCollection.whereEqualTo("uid", currentUserUid).get().await()
-
-                        // 만약 현재 사용자의 uid가 'member' 컬렉션에 있다면, 이 상품을 리스트에 추가합니다.
-                        if (!memberSnapshot.isEmpty) {
+                        val maker = productDocument.getString("maker")
+                        val makerUid = maker?.split("_")?.get(0)
+                        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+                        if (currentUserId == makerUid) {
                             val orignPname = productDocument.getString("productName")
                             var productName = orignPname?.take(7) ?: "" // 처음 7글자만 가져오기
                             if (orignPname != null && orignPname.length > 7) { // 만약 길이가 7을 초과한다면
