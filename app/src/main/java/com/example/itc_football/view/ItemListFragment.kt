@@ -3,6 +3,7 @@ package com.example.itc_football.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +75,45 @@ class ItemListFragment : Fragment() {
         newRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-            override fun onItemClick(position:Int){
+            //            override fun onItemClick(position:Int){
+//                val productID = newProductList[position].productID
+//                val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+//
+//                // Firestore 인스턴스 생성
+//                val firestore = FirebaseFirestore.getInstance()
+//
+//                // 파이어스토어에서 member 컬렉션 조회
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    try {
+//                        val productDocument = firestore.collection("product").document(productID)
+//                        val memberSnapshot =
+//                            productDocument.collection("member").whereEqualTo("uid", currentUserUid).get().await()
+//
+//                        // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
+//                        activity?.runOnUiThread {
+//
+//                                val previewIntent = Intent(context, PreviewActivity::class.java)
+//                                previewIntent.putExtra("productID", newProductList[position].productID)
+//                                previewIntent.putExtra("productName", newProductList[position].productName)
+//                                previewIntent.putExtra("productDetail", newProductList[position].productDetail)
+//                                previewIntent.putExtra("productPrice", newProductList[position].productPrice)
+//
+//                                previewIntent.putExtra("maxMember", newProductList[position].maxMember)
+//                                previewIntent.putExtra("nowMember", newProductList[position].nowMember)
+//
+//                                startActivity(previewIntent)
+//
+//
+//                        }
+//                    } catch (e: Exception) {
+//
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+            //product 컬렉션 안 member 컬렉션 안에 현재 사용자의 uid가 있는지 확인 후 같으면 실행
+            override fun onItemClick(position: Int) {
                 val productID = newProductList[position].productID
                 val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -90,27 +129,53 @@ class ItemListFragment : Fragment() {
 
                         // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
                         activity?.runOnUiThread {
+                            if (!memberSnapshot.isEmpty) {
+                                val intent = Intent(requireContext(), ChatActivity::class.java)
+                                val user = FirebaseAuth.getInstance().currentUser
+                                val email = user?.email ?: ""
 
+                                intent.putExtra(ChatActivity.USERNAME, email)
+                                intent.putExtra("productID", newProductList[position].productID)
+                                intent.putExtra("productName", newProductList[position].productName)
+                                intent.putExtra("productPrice", newProductList[position].productPrice)
+                                intent.putExtra("maxMember", newProductList[position].maxMember)
+                                intent.putExtra("nowMember", newProductList[position].nowMember)
+                                startActivity(intent)
+                            } else {
                                 val previewIntent = Intent(context, PreviewActivity::class.java)
-                                previewIntent.putExtra("productID", newProductList[position].productID)
-                                previewIntent.putExtra("productName", newProductList[position].productName)
-                                previewIntent.putExtra("productDetail", newProductList[position].productDetail)
-                                previewIntent.putExtra("productPrice", newProductList[position].productPrice)
+                                previewIntent.putExtra(
+                                    "productID",
+                                    newProductList[position].productID
+                                )
+                                previewIntent.putExtra(
+                                    "productName",
+                                    newProductList[position].productName
+                                )
+                                previewIntent.putExtra(
+                                    "productDetail",
+                                    newProductList[position].productDetail
+                                )
+                                previewIntent.putExtra(
+                                    "productPrice",
+                                    newProductList[position].productPrice
+                                )
 
-                                previewIntent.putExtra("maxMember", newProductList[position].maxMember)
-                                previewIntent.putExtra("nowMember", newProductList[position].nowMember)
-
+                                previewIntent.putExtra(
+                                    "maxMember",
+                                    newProductList[position].maxMember
+                                )
+                                previewIntent.putExtra(
+                                    "nowMember",
+                                    newProductList[position].nowMember
+                                )
                                 startActivity(previewIntent)
-
-
+                            }
                         }
                     } catch (e: Exception) {
-
+                        // 오류 처리
                         e.printStackTrace()
                     }
-                }
-
-            }
+                }  }
         })
     }
 
