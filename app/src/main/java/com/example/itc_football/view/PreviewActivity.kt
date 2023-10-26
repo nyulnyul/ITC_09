@@ -97,9 +97,13 @@ class PreviewActivity : AppCompatActivity() {
                 if (currentUserId == makerUid) {
                     // 동일 인물일 경우, 스피너 보이기
                     binding.whatable.visibility = View.VISIBLE
+                    binding.updateBtn.visibility = View.VISIBLE
+                    binding.deleteBtn.visibility = View.VISIBLE
                 } else {
                     // 동일 인물이 아닐 경우, 스피너 숨기기
                     binding.whatable.visibility = View.GONE
+                    binding.updateBtn.visibility = View.GONE
+                    binding.deleteBtn.visibility = View.GONE
                 }
 
                 val makerParts = maker.split("_") // maker값을 _로 나눔
