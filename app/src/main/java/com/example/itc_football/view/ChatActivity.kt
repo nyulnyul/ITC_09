@@ -31,9 +31,12 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
     private val chatList = mutableListOf<Chat>()
+
     private var userName = ""
+
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = FirebaseFirestore.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,22 +46,120 @@ class ChatActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser
         if (user != null) {
-            fetchUserName(user)
+            db.collection("users").document(user.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        userName = document.data?.get("name").toString()
+                        Log.d(TAG, "userName: $userName")
+                    } else {
+                        Log.d(TAG, "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "get failed with ", exception)
+                }
+        }
+// productID를 받아옴
+        val productID = intent.getStringExtra("productID")
+        userName = intent.getStringExtra(USERNAME) ?: ""
+
+        // productID를 이용하여 스토리지에서 이미지를 다운로드
+        val storage = Firebase.storage.reference.child("${productID}.png")
+        storage.downloadUrl.addOnSuccessListener {
+            Glide.with(this).load(it).into(binding.imgProduct)
         }
 
-        // Load chat messages
+        binding.productName.text = intent.getStringExtra("productName")
+        binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
+
         progressBar = binding.progressBar
         progressBar.visibility = View.VISIBLE
         loadChatMessages()
 
-        // Initialize chat functionality
-        initChat()
+        if (userName.isEmpty()) {
+            finish()
+        } else {
+            socketHandler = SocketHandler()
+            chatAdapter = ChatAdapter(userName)
 
-        // Load product details
-        loadProductDetails()
+            binding.rvChat.apply {
+                layoutManager = LinearLayoutManager(this@ChatActivity)
+                adapter = chatAdapter
+            }
 
-        // Handle UI scrolling
-        handleScrollBehavior()
+            binding.sendButton.setOnClickListener {//채팅을 보내기
+                val message = binding.etMsg.text.toString()
+                if (message.isNotEmpty()) {
+                    val chat = Chat(
+                        username = userName,
+                        text = message,
+                        timestamp = Timestamp.now()
+                    )
+                    socketHandler.emitChat(chat)
+// Save the chat to Firestore
+                    if (productID != null) {
+                        db.collection("product").document(productID).collection("msg")
+                            .add(chat)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                                )
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+                    }
+
+
+                    Log.d("Chatting", "$chat")
+                    binding.etMsg.setText("")
+                }
+            }
+
+            socketHandler.onNewChat.observe(this) {
+                val chat = it.copy(isSelf = it.username == userName)
+                chatList.add(chat)
+                chatAdapter.submitChat(chatList)
+                Log.d("ChatList", "$chatList")
+                binding.rvChat.scrollToPosition(chatList.size - 1)
+            }
+        }
+
+        val initialMargin = resources.getDimensionPixelSize(R.dimen.initial_margin)
+
+        val constraintLayout = binding.chatLayout // 여기에 자신의 ConstraintLayout ID를 사용하세요
+        val rvChat = binding.rvChat
+        val sendMessageLayout = binding.sendMessageLayout
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+
+        // rvChat의 아래 여백을 initialMargin만큼 설정 (처음에는 이 여백이 적용됨)
+        constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+        constraintSet.applyTo(constraintLayout)
+
+        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy < 0 && !rvChat.canScrollVertically(1)) {
+                    // 스크롤을 올릴 때 (메시지 아래로 스크롤)
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+                    constraintSet.applyTo(constraintLayout)
+                } else if (rvChat.canScrollVertically(1)) {
+                    // 스크롤이 아래로 진행 중
+                    constraintSet.clone(constraintLayout)
+                    // rvChat의 아래 여백을 0으로 설정 (스크롤 중에는 여백을 없애 줍니다)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, 12)
+                    constraintSet.applyTo(constraintLayout)
+                } else {
+                    // 스크롤 위치가 최하단이 아닌 경우
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+                    constraintSet.applyTo(constraintLayout)
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -70,134 +171,36 @@ class ChatActivity : AppCompatActivity() {
         const val USERNAME = "username"
     }
 
-    private fun fetchUserName(user: FirebaseUser) {
-        db.collection("users").document(user.uid).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    userName = document.data?.get("name").toString()
-                    Log.d(TAG, "userName: $userName")
-                } else {
-                    Log.d(TAG, "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-    }
-
-    private fun loadProductDetails() {
-        val productID = intent.getStringExtra("productID")
-        userName = intent.getStringExtra(USERNAME) ?: ""
-        val storage = Firebase.storage.reference.child("${productID}.png")
-        storage.downloadUrl.addOnSuccessListener {
-            Glide.with(this).load(it).into(binding.imgProduct)
-        }
-        binding.productName.text = intent.getStringExtra("productName")
-        binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
-    }
-
-    private fun initChat() {
-        socketHandler = SocketHandler()
-        chatAdapter = ChatAdapter()
-        binding.rvChat.apply {
-            layoutManager = LinearLayoutManager(this@ChatActivity)
-            adapter = chatAdapter
-        }
-
-        binding.sendButton.setOnClickListener {
-            val message = binding.etMsg.text.toString()
-            if (message.isNotEmpty()) {
-                val chat = Chat(
-                    username = userName,
-                    text = message,
-                    timestamp = Timestamp.now()
-                )
-                socketHandler.emitChat(chat)
-                saveChatToFirestore(chat)
-                binding.etMsg.setText("")
-            }
-        }
-
-        socketHandler.onNewChat.observe(this) {
-            val chat = it.copy(isSelf = it.username == userName)
-            chatList.add(chat)
-            chatAdapter.submitChat(chatList)
-            binding.rvChat.scrollToPosition(chatList.size - 1)
-        }
-    }
-
-    private fun saveChatToFirestore(chat: Chat) {
-        val productID = intent.getStringExtra("productID")
-        if (productID != null) {
-            db.collection("product").document(productID).collection("msg")
-                .add(chat)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                }
-        }
-        binding.etMsg.setText("")
-    }
-
-    private fun handleScrollBehavior() {
-        val initialMargin = resources.getDimensionPixelSize(R.dimen.initial_margin)
-        val constraintLayout = binding.chatLayout
-        val rvChat = binding.rvChat
-        val sendMessageLayout = binding.sendMessageLayout
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy < 0 && !rvChat.canScrollVertically(1)) {
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
-                    constraintSet.applyTo(constraintLayout)
-                } else if (rvChat.canScrollVertically(1)) {
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, 12)
-                    constraintSet.applyTo(constraintLayout)
-                } else {
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
-                    constraintSet.applyTo(constraintLayout)
-                }
-            }
-        })
-    }
-
-    // Firestore에서 데이터를 로드한 후, 자신과 상대방의 메시지를 구별하여 정렬
     private fun loadChatMessages() {
         val productID = intent.getStringExtra("productID")
         if (productID != null) {
             db.collection("product").document(productID).collection("msg")
-                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .orderBy(
+                    "timestamp",
+                    Query.Direction.ASCENDING
+                )  // Assuming that 'timestamp' field exists in your Chat data class.
                 .get()
                 .addOnSuccessListener { result ->
-                    val currentUserUID = firebaseAuth.currentUser?.uid // 현재 사용자의 UID
-                    chatList.clear()
-
                     for (document in result) {
-                        val chat = document.toObject(Chat::class.java)
-                        val isSelf =
-                            chat.username == userName || document.getString("userUID") == currentUserUID
-
-                        // isSelf 값이 true면 자신의 메시지, false면 상대방의 메시지로 분류
-                        chatList.add(chat.copy(isSelf = isSelf))
+                        var chat = document.toObject(Chat::class.java)
+                        if (chat.username == userName) {
+                            chat = chat.copy(isSelf = true)
+                        }
+                        chatList.add(chat)
                     }
-
                     chatAdapter.submitChat(chatList)
                     binding.rvChat.scrollToPosition(chatList.size - 1)
+
                     progressBar.visibility = View.GONE
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents.", exception)
+
                     progressBar.visibility = View.GONE
                 }
         }
     }
 
+
 }
+
