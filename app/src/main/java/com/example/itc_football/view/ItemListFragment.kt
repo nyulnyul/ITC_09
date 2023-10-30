@@ -3,6 +3,7 @@ package com.example.itc_football.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,9 @@ import com.example.itc_football.data.Product
 import com.example.itc_football.databinding.ItemListFragmentBinding
 import com.example.itc_football.viewmodel.ProductAdapter
 import com.example.itc_football.viewmodel.ShimmerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +34,7 @@ class ItemListFragment : Fragment() {
 
     private var newProductList = arrayListOf<Product>()
     private lateinit var shimmerAdapter: ShimmerAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,18 +75,71 @@ class ItemListFragment : Fragment() {
         newRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val intent = Intent(context, PreviewActivity::class.java)
-                val product = productList[position]
 
-                intent.putExtra("productID", product.productID)
-                intent.putExtra("productName", product.productName)
-                intent.putExtra("productDetail", product.productDetail)
-                intent.putExtra("productPrice", product.productPrice)
-                intent.putExtra("maxMember", product.maxMember)
-                intent.putExtra("nowMember", product.nowMember)
-                startActivity(intent)
-            }
+            //product 컬렉션 안 member 컬렉션 안에 현재 사용자의 uid가 있는지 확인 후 같으면 실행
+            override fun onItemClick(position: Int) {
+                val productID = newProductList[position].productID
+                val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+
+                // Firestore 인스턴스 생성
+                val firestore = FirebaseFirestore.getInstance()
+
+                // 파이어스토어에서 member 컬렉션 조회
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val productDocument = firestore.collection("product").document(productID)
+                        val memberSnapshot =
+                            productDocument.collection("member").whereEqualTo("uid", currentUserUid).get().await()
+
+                        // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
+                        activity?.runOnUiThread {
+                            if (!memberSnapshot.isEmpty) {
+                                val intent = Intent(requireContext(), ChatActivity::class.java)
+                                val user = FirebaseAuth.getInstance().currentUser
+                                val email = user?.email ?: ""
+
+                                intent.putExtra(ChatActivity.USERNAME, email)
+                                intent.putExtra("productID", newProductList[position].productID)
+                                intent.putExtra("productName", newProductList[position].productName)
+                                intent.putExtra("productPrice", newProductList[position].productPrice)
+                                intent.putExtra("maxMember", newProductList[position].maxMember)
+                                intent.putExtra("nowMember", newProductList[position].nowMember)
+                                startActivity(intent)
+                            } else {
+                                val previewIntent = Intent(context, PreviewActivity::class.java)
+                                previewIntent.putExtra(
+                                    "productID",
+                                    newProductList[position].productID
+                                )
+                                previewIntent.putExtra(
+                                    "productName",
+                                    newProductList[position].productName
+                                )
+                                previewIntent.putExtra(
+                                    "productDetail",
+                                    newProductList[position].productDetail
+                                )
+                                previewIntent.putExtra(
+                                    "productPrice",
+                                    newProductList[position].productPrice
+                                )
+
+                                previewIntent.putExtra(
+                                    "maxMember",
+                                    newProductList[position].maxMember
+                                )
+                                previewIntent.putExtra(
+                                    "nowMember",
+                                    newProductList[position].nowMember
+                                )
+                                startActivity(previewIntent)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // 오류 처리
+                        e.printStackTrace()
+                    }
+                }  }
         })
     }
 
@@ -107,15 +164,18 @@ class ItemListFragment : Fragment() {
                     val maxMember = document.getLong("maxMember")?.toInt() ?: 0
                     val nowMember = document.getLong("nowMember")?.toInt() ?: 0
                     val productID = document.getString("productID")
+                    val roomAble = document.getString("roomAble")
 
-                    if (productName != null && productDetail != null && productPrice != null && productID != null) {
+                    if (productName != null && productDetail != null && productPrice != null && productID != null &&roomAble != "공구완료") {
                         val product = Product(
                             productName,
                             productDetail,
                             productPrice.toInt(),
                             maxMember,
                             nowMember,
-                            productID
+                            productID,
+                            roomAble.toString()
+
                         )
                         tempProductList.add(product)
                     }

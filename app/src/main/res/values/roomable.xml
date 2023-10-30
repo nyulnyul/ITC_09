@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="roomAble">
+        <item>공구중</item>
+        <item>예약중</item>
+        <item>공구완료</item>
+    </string-array>
+
+</resources>

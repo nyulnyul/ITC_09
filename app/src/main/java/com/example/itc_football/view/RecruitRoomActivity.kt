@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -115,10 +116,18 @@ class RecruitRoomActivity : AppCompatActivity() {
         // 사용자가 입력한 정보를 가져와서 Firebase Firestore에 추가합니다.
         val productName = binding.productName.text.toString()
         val productDetail = binding.productDetail.text.toString()
-        val productPrice = binding.productPrice.text.toString().toLong()
+        val productPriceText = binding.productPrice.text.toString()
+        val productPrice = try {
+            productPriceText.toLong()
+        } catch (e: NumberFormatException) {
+            Toast.makeText(this, "올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val maxMember = binding.maxMember.selectedItem.toString().toInt()
         val nowMember = 1 // 기본으로 1로 설정
         val maker = roomMaker
+        val roomAble = "공구중"
         Log.d("roomMaker2 : ", roomMaker)
 
         val productData = hashMapOf(
@@ -128,6 +137,7 @@ class RecruitRoomActivity : AppCompatActivity() {
             "maxMember" to maxMember,
             "nowMember" to nowMember,
             "maker" to maker,
+            "roomAble" to roomAble
         )
 
         productCollection.add(productData)
