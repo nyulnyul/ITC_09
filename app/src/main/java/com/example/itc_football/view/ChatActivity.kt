@@ -70,9 +70,22 @@ class ChatActivity : AppCompatActivity() {
         const val USERNAME = "username"
     }
 
+    private fun fetchUserName(user: FirebaseUser) {
+        db.collection("users").document(user.uid).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    userName = document.data?.get("name").toString()
+                    Log.d(TAG, "userName: $userName")
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+    }
 
-        // productID를 받아옴
-
+    private fun loadProductDetails() {
         val productID = intent.getStringExtra("productID")
         userName = intent.getStringExtra(USERNAME) ?: ""
         val storage = Firebase.storage.reference.child("${productID}.png")
@@ -83,17 +96,13 @@ class ChatActivity : AppCompatActivity() {
         binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
     }
 
-        progressBar = binding.progressBar
-        progressBar.visibility = View.VISIBLE
-        loadChatMessages()
-
-        if (userName.isEmpty()) {
-            finish()
-        } else {
-            socketHandler = SocketHandler()
-
-            chatAdapter = ChatAdapter(userName)
-
+    private fun initChat() {
+        socketHandler = SocketHandler()
+        chatAdapter = ChatAdapter()
+        binding.rvChat.apply {
+            layoutManager = LinearLayoutManager(this@ChatActivity)
+            adapter = chatAdapter
+        }
 
         binding.sendButton.setOnClickListener {
             val message = binding.etMsg.text.toString()
@@ -109,30 +118,13 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-            binding.sendButton.setOnClickListener {//채팅을 보내기
-                val message = binding.etMsg.text.toString()
-                if (message.isNotEmpty()) {
-                    val chat = Chat(
-                        username = userName,
-                        text = message,
-                        timestamp = Timestamp.now()
-                    )
-                    socketHandler.emitChat(chat)
-// Save the chat to Firestore
-                    if (productID != null) {
-                        db.collection("product").document(productID).collection("msg")
-                            .add(chat)
-                            .addOnSuccessListener { documentReference ->
-                                Log.d(
-                                    TAG,
-                                    "DocumentSnapshot added with ID: ${documentReference.id}"
-                                )
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Error adding document", e)
-                            }
-                    }
-
+        socketHandler.onNewChat.observe(this) {
+            val chat = it.copy(isSelf = it.username == userName)
+            chatList.add(chat)
+            chatAdapter.submitChat(chatList)
+            binding.rvChat.scrollToPosition(chatList.size - 1)
+        }
+    }
 
     private fun saveChatToFirestore(chat: Chat) {
         val productID = intent.getStringExtra("productID")
@@ -175,18 +167,6 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         })
-
-
-    }
-
-    override fun onDestroy() {
-        socketHandler.disconnectSocket()
-        super.onDestroy()
-    }
-
-    companion object {
-        const val USERNAME = "username"
-
     }
 
     // Firestore에서 데이터를 로드한 후, 자신과 상대방의 메시지를 구별하여 정렬
@@ -194,11 +174,7 @@ class ChatActivity : AppCompatActivity() {
         val productID = intent.getStringExtra("productID")
         if (productID != null) {
             db.collection("product").document(productID).collection("msg")
-                .orderBy(
-                    "timestamp",
-                    Query.Direction.ASCENDING
-                )  // Assuming that 'timestamp' field exists in your Chat data class.
-
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { result ->
                     val currentUserUID = firebaseAuth.currentUser?.uid // 현재 사용자의 UID
