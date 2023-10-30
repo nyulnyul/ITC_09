@@ -61,6 +61,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
 
+
         // productID를 받아옴
         val productID = intent.getStringExtra("productID")
         userName = intent.getStringExtra(USERNAME) ?: ""
@@ -83,7 +84,7 @@ class ChatActivity : AppCompatActivity() {
         } else {
             socketHandler = SocketHandler()
 
-            chatAdapter = ChatAdapter(userName)
+            chatAdapter = ChatAdapter()
 
             binding.rvChat.apply {
                 layoutManager = LinearLayoutManager(this@ChatActivity)
@@ -104,10 +105,7 @@ class ChatActivity : AppCompatActivity() {
                         db.collection("product").document(productID).collection("msg")
                             .add(chat)
                             .addOnSuccessListener { documentReference ->
-                                Log.d(
-                                    TAG,
-                                    "DocumentSnapshot added with ID: ${documentReference.id}"
-                                )
+                                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                             }
                             .addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding document", e)
@@ -165,6 +163,7 @@ class ChatActivity : AppCompatActivity() {
         })
 
 
+
     }
 
     override fun onDestroy() {
@@ -180,10 +179,7 @@ class ChatActivity : AppCompatActivity() {
         val productID = intent.getStringExtra("productID")
         if (productID != null) {
             db.collection("product").document(productID).collection("msg")
-                .orderBy(
-                    "timestamp",
-                    Query.Direction.ASCENDING
-                )  // Assuming that 'timestamp' field exists in your Chat data class.
+                .orderBy("timestamp", Query.Direction.ASCENDING)  // Assuming that 'timestamp' field exists in your Chat data class.
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
