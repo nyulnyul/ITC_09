@@ -53,6 +53,13 @@ class MyPageFragment : Fragment() {
             // 데이터를 가져오기
             getProductData()
         }
+        binding.button.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(context, LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
 
         binding.dataview.visibility = View.GONE
 
@@ -126,6 +133,7 @@ class MyPageFragment : Fragment() {
 //                startActivity(intent)
 //                Log.e("TAG", "onItemClick: " + newMypageList[position].productID)
 //            }
+
         })
         return view
     }
