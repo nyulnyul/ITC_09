@@ -1,10 +1,9 @@
 package com.example.itc_football.view
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,27 +16,27 @@ import com.example.itc_football.viewmodel.SocketHandler
 import com.example.itc_football.databinding.ChatActivityBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var socketHandler: SocketHandler
     private lateinit var binding: ChatActivityBinding
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var progressBar: ProgressBar
 
     private val chatList = mutableListOf<Chat>()
 
-    private var userName = ""
+    private var userNickname = ""
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = FirebaseFirestore.getInstance()
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
@@ -49,8 +48,9 @@ class ChatActivity : AppCompatActivity() {
             db.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        userName = document.data?.get("name").toString()
-                        Log.d(TAG, "userName: $userName")
+                        userNickname = document.data?.get("name").toString()
+                        Log.d(TAG, "userName: $userNickname")
+                        loadChatMessages()
                     } else {
                         Log.d(TAG, "No such document")
                     }
@@ -59,9 +59,11 @@ class ChatActivity : AppCompatActivity() {
                     Log.d(TAG, "get failed with ", exception)
                 }
         }
-// productID를 받아옴
+
+
+        // productID를 받아옴
         val productID = intent.getStringExtra("productID")
-        userName = intent.getStringExtra(USERNAME) ?: ""
+        userNickname = intent.getStringExtra(USERNAME) ?: ""
 
         // productID를 이용하여 스토리지에서 이미지를 다운로드
         val storage = Firebase.storage.reference.child("${productID}.png")
@@ -72,16 +74,11 @@ class ChatActivity : AppCompatActivity() {
         binding.productName.text = intent.getStringExtra("productName")
         binding.productPrice.text = "${intent.getIntExtra("productPrice", 0)}원"
 
-        progressBar = binding.progressBar
-        progressBar.visibility = View.VISIBLE
-        loadChatMessages()
-
-        if (userName.isEmpty()) {
+        if (userNickname.isEmpty()) {
             finish()
         } else {
             socketHandler = SocketHandler()
-            chatAdapter = ChatAdapter(userName)
-
+            chatAdapter = ChatAdapter()
             binding.rvChat.apply {
                 layoutManager = LinearLayoutManager(this@ChatActivity)
                 adapter = chatAdapter
@@ -91,7 +88,7 @@ class ChatActivity : AppCompatActivity() {
                 val message = binding.etMsg.text.toString()
                 if (message.isNotEmpty()) {
                     val chat = Chat(
-                        username = userName,
+                        username = userNickname,
                         text = message,
                         timestamp = Timestamp.now()
                     )
@@ -118,7 +115,7 @@ class ChatActivity : AppCompatActivity() {
             }
 
             socketHandler.onNewChat.observe(this) {
-                val chat = it.copy(isSelf = it.username == userName)
+                val chat = it.copy(isSelf = it.username == userNickname)
                 chatList.add(chat)
                 chatAdapter.submitChat(chatList)
                 Log.d("ChatList", "$chatList")
@@ -126,40 +123,42 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-        val initialMargin = resources.getDimensionPixelSize(R.dimen.initial_margin)
+//        val initialMargin = resources.getDimensionPixelSize(R.dimen.initial_margin)
+//
+//        val constraintLayout = binding.chatLayout // 여기에 자신의 ConstraintLayout ID를 사용하세요
+//        val rvChat = binding.rvChat
+//        val sendMessageLayout = binding.sendMessageLayout
+//
+//        val constraintSet = ConstraintSet()
+//        constraintSet.clone(constraintLayout)
+//
+//        // rvChat의 아래 여백을 initialMargin만큼 설정 (처음에는 이 여백이 적용됨)
+//        constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+//        constraintSet.applyTo(constraintLayout)
+//
+//        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                if (dy < 0 && !rvChat.canScrollVertically(1)) {
+//                    // 스크롤을 올릴 때 (메시지 아래로 스크롤)
+//                    constraintSet.clone(constraintLayout)
+//                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+//                    constraintSet.applyTo(constraintLayout)
+//                } else if (rvChat.canScrollVertically(1)) {
+//                    // 스크롤이 아래로 진행 중
+//                    constraintSet.clone(constraintLayout)
+//                    // rvChat의 아래 여백을 0으로 설정 (스크롤 중에는 여백을 없애 줍니다)
+//                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, 12)
+//                    constraintSet.applyTo(constraintLayout)
+//                } else {
+//                    // 스크롤 위치가 최하단이 아닌 경우
+//                    constraintSet.clone(constraintLayout)
+//                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
+//                    constraintSet.applyTo(constraintLayout)
+//                }
+//            }
+//        })
 
-        val constraintLayout = binding.chatLayout // 여기에 자신의 ConstraintLayout ID를 사용하세요
-        val rvChat = binding.rvChat
-        val sendMessageLayout = binding.sendMessageLayout
 
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        // rvChat의 아래 여백을 initialMargin만큼 설정 (처음에는 이 여백이 적용됨)
-        constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
-        constraintSet.applyTo(constraintLayout)
-
-        rvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy < 0 && !rvChat.canScrollVertically(1)) {
-                    // 스크롤을 올릴 때 (메시지 아래로 스크롤)
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
-                    constraintSet.applyTo(constraintLayout)
-                } else if (rvChat.canScrollVertically(1)) {
-                    // 스크롤이 아래로 진행 중
-                    constraintSet.clone(constraintLayout)
-                    // rvChat의 아래 여백을 0으로 설정 (스크롤 중에는 여백을 없애 줍니다)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, 12)
-                    constraintSet.applyTo(constraintLayout)
-                } else {
-                    // 스크롤 위치가 최하단이 아닌 경우
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setMargin(rvChat.id, ConstraintSet.BOTTOM, initialMargin)
-                    constraintSet.applyTo(constraintLayout)
-                }
-            }
-        })
     }
 
     override fun onDestroy() {
@@ -175,32 +174,32 @@ class ChatActivity : AppCompatActivity() {
         val productID = intent.getStringExtra("productID")
         if (productID != null) {
             db.collection("product").document(productID).collection("msg")
-                .orderBy(
-                    "timestamp",
-                    Query.Direction.ASCENDING
-                )  // Assuming that 'timestamp' field exists in your Chat data class.
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { result ->
+                    val fetchedChatList = mutableListOf<Chat>()
+
                     for (document in result) {
-                        var chat = document.toObject(Chat::class.java)
-                        if (chat.username == userName) {
-                            chat = chat.copy(isSelf = true)
-                        }
-                        chatList.add(chat)
+                        val chat = document.toObject(Chat::class.java)
+                        fetchedChatList.add(chat)
                     }
+
+                    // 여기서 내 채팅인지 여부를 판별하고 isSelf 값을 설정합니다.
+                    fetchedChatList.forEach { chat ->
+                        chat.isSelf = chat.username == userNickname
+                    }
+
+                    // 기존 채팅 리스트를 업데이트하고 UI를 갱신합니다.
+                    chatList.clear()
+                    chatList.addAll(fetchedChatList)
                     chatAdapter.submitChat(chatList)
                     binding.rvChat.scrollToPosition(chatList.size - 1)
-
-                    progressBar.visibility = View.GONE
                 }
                 .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
-
-                    progressBar.visibility = View.GONE
+                    Log.w(TAG, "문서 가져오기 실패.", exception)
                 }
         }
     }
 
 
 }
-
