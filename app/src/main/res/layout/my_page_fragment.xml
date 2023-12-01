@@ -194,7 +194,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginBottom="40dp"
-            android:backgroundTint="@color/light_gray"
+            android:background="@drawable/custom_logout_button"
             android:text="로그아웃"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

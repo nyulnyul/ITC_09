@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="12dp" /> <!-- 반경 값으로 모서리를 둥글게 설정 -->
-    <solid android:color="#83B4F9" /> <!-- 배경 색상 -->
+    <solid android:color="#F0F3FA" /> <!-- 배경 색상 -->
 </shape>

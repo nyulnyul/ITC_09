@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".view.LoginActivity"
     android:gravity="center">
@@ -61,13 +62,12 @@
                 android:drawablePadding="8dp"/>
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:id="@+id/login_btn"
                 android:text="@string/login"
+                android:background="@drawable/custom_button"
                 android:textSize="18sp"
-                app:cornerRadius="15dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="#83B4F9"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

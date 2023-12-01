@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemIconSize="25dp"
+        app:itemTextColor="@color/gray"
         app:itemIconTint="@drawable/item_selector"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_background"
