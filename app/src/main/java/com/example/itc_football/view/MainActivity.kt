@@ -25,14 +25,16 @@ class MainActivity : AppCompatActivity() {
         // 기본 화면으로 홈 프래그먼트 표시
         setFragment(homeFragment)
 
-        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.bottom_home -> setFragment(homeFragment)
                 R.id.bottom_chat -> setFragment(chatFragment)
+                R.id.bottom_home -> setFragment(homeFragment)
                 R.id.bottom_mypage -> setFragment(myPageFragment)
             }
             true
         }
+
+        binding.bottomNavigation.selectedItemId = R.id.bottom_home
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -44,4 +46,6 @@ class MainActivity : AppCompatActivity() {
 //        transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    
 }

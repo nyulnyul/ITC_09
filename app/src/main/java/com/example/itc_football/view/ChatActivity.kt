@@ -93,7 +93,7 @@ class ChatActivity : AppCompatActivity() {
                         timestamp = Timestamp.now()
                     )
                     socketHandler.emitChat(chat)
-// Save the chat to Firestore
+                    // 메시지 파베에 저장
                     if (productID != null) {
                         db.collection("product").document(productID).collection("msg")
                             .add(chat)
@@ -184,7 +184,7 @@ class ChatActivity : AppCompatActivity() {
                         fetchedChatList.add(chat)
                     }
 
-                    // 여기서 내 채팅인지 여부를 판별하고 isSelf 값을 설정합니다.
+                    // 여기서 내 채팅인지 여부를 판별하고 isSelf 값을 설정
                     fetchedChatList.forEach { chat ->
                         chat.isSelf = chat.username == userNickname
                     }

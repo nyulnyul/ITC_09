@@ -89,7 +89,8 @@ class ItemListFragment : Fragment() {
                     try {
                         val productDocument = firestore.collection("product").document(productID)
                         val memberSnapshot =
-                            productDocument.collection("member").whereEqualTo("uid", currentUserUid).get().await()
+                            productDocument.collection("member").whereEqualTo("uid", currentUserUid)
+                                .get().await()
 
                         // 현재 사용자의 uid가 member 컬렉션에 있다면 ChatActivity로 이동, 없다면 PreviewActivity로 이동
                         activity?.runOnUiThread {
@@ -101,7 +102,10 @@ class ItemListFragment : Fragment() {
                                 intent.putExtra(ChatActivity.USERNAME, email)
                                 intent.putExtra("productID", newProductList[position].productID)
                                 intent.putExtra("productName", newProductList[position].productName)
-                                intent.putExtra("productPrice", newProductList[position].productPrice)
+                                intent.putExtra(
+                                    "productPrice",
+                                    newProductList[position].productPrice
+                                )
                                 intent.putExtra("maxMember", newProductList[position].maxMember)
                                 intent.putExtra("nowMember", newProductList[position].nowMember)
                                 startActivity(intent)
@@ -139,7 +143,8 @@ class ItemListFragment : Fragment() {
                         // 오류 처리
                         e.printStackTrace()
                     }
-                }  }
+                }
+            }
         })
     }
 
@@ -166,7 +171,7 @@ class ItemListFragment : Fragment() {
                     val productID = document.getString("productID")
                     val roomAble = document.getString("roomAble")
 
-                    if (productName != null && productDetail != null && productPrice != null && productID != null &&roomAble != "공구완료") {
+                    if (productName != null && productDetail != null && productPrice != null && productID != null && roomAble != "공구완료") {
                         val product = Product(
                             productName,
                             productDetail,
@@ -192,6 +197,11 @@ class ItemListFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshData()
     }
 
     override fun onDestroyView() {

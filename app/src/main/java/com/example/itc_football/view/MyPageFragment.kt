@@ -92,23 +92,32 @@ class MyPageFragment : Fragment() {
         val adapter = MyPageListAdapter(newMypageList)
         newRecyclerView.adapter = adapter
         adapter.setOnItemClickListener(object : MyPageListAdapter.OnItemClickListener {
-                        override fun onItemClick(position:Int){
+            override fun onItemClick(position: Int) {
 
                 // 파이어스토어에서 member 컬렉션 조회
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         activity?.runOnUiThread {
 
-                                val previewIntent = Intent(context, PreviewActivity::class.java)
-                                previewIntent.putExtra("productID", newMypageList[position].productID)
-                                previewIntent.putExtra("productName", newMypageList[position].productName)
-                                previewIntent.putExtra("productDetail", newMypageList[position].productDetail)
-                                previewIntent.putExtra("productPrice", newMypageList[position].productPrice)
+                            val previewIntent = Intent(context, PreviewActivity::class.java)
+                            previewIntent.putExtra("productID", newMypageList[position].productID)
+                            previewIntent.putExtra(
+                                "productName",
+                                newMypageList[position].productName
+                            )
+                            previewIntent.putExtra(
+                                "productDetail",
+                                newMypageList[position].productDetail
+                            )
+                            previewIntent.putExtra(
+                                "productPrice",
+                                newMypageList[position].productPrice
+                            )
 
-                                previewIntent.putExtra("maxMember", newMypageList[position].maxMember)
-                                previewIntent.putExtra("nowMember", newMypageList[position].nowMember)
+                            previewIntent.putExtra("maxMember", newMypageList[position].maxMember)
+                            previewIntent.putExtra("nowMember", newMypageList[position].nowMember)
 
-                                startActivity(previewIntent)
+                            startActivity(previewIntent)
 
 
                         }
@@ -144,6 +153,7 @@ class MyPageFragment : Fragment() {
 //        handler.removeCallbacksAndMessages(null)
         _binding = null
     }
+
     private fun startShimmerEffect() {
         binding.shimmerViewMypage.visibility = View.VISIBLE
         binding.shimmerViewMypage.startShimmer()
@@ -157,11 +167,13 @@ class MyPageFragment : Fragment() {
     private fun showDataView() {
         binding.dataview.visibility = View.VISIBLE
     }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshData() {
         getProductData()
         mysrl!!.isRefreshing = false
     }
+
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged")
     private fun getProductData() {
@@ -191,7 +203,7 @@ class MyPageFragment : Fragment() {
                             val roomAble = productDocument.getString("roomAble")
                             val productDetail = productDocument.getString("productDetail")
 
-                            if (productName != null && productDetail!= null &&roomAble != null && productID != null) {
+                            if (productName != null && productDetail != null && roomAble != null && productID != null) {
                                 val product = MypageList(
                                     productName,
                                     maxMember,
@@ -223,5 +235,11 @@ class MyPageFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getProductData()
+
     }
 }

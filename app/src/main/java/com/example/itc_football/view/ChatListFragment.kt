@@ -21,6 +21,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
 class ChatListFragment : Fragment() {
@@ -50,10 +51,10 @@ class ChatListFragment : Fragment() {
             refreshData()
         }
 
-        if (!isDataLoaded) {
-            // 데이터를 가져오기
+        runBlocking {
             getChatData()
         }
+
 
         // 어댑터를 생성하고 리사이클러뷰에 연결
         val adapter = MyChatAdapter(newProductList)

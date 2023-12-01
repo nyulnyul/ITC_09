@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
 
-        <!-- Include your app bar layout here -->
         <include
             android:id="@+id/include"
             layout="@layout/toolbar"
@@ -29,12 +28,13 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        android:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:itemIconSize="25dp"
-        app:itemTextColor="@color/gray"
-        app:itemIconTint="@drawable/item_selector"
+        android:layout_height="63dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_background"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:itemTextColor="@color/gray"
         app:menu="@menu/bottom_menu" />
 </RelativeLayout>
