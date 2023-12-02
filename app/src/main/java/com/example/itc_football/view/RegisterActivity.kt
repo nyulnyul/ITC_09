@@ -55,5 +55,10 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "빠짐 없이 채워주세요!!", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.loginText.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

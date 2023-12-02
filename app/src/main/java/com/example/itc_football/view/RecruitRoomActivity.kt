@@ -153,6 +153,15 @@ class RecruitRoomActivity : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         // 업데이트 실패 시 처리
                     }
+                productCollection.document(productID).collection("member").document(user!!.uid)
+                    .set(hashMapOf("uid" to user.uid))
+                    .addOnSuccessListener {
+                        // 추가
+                    }
+                    .addOnFailureListener { e ->
+                        // 추가
+
+                    }
             }
             .addOnFailureListener { e ->
                 // 추가
